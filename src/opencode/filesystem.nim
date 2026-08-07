@@ -3,7 +3,7 @@
 # Auto-generated from OpenAPI 3.x specification
 # Clue CLI Assistant https://github.com/openpeeps/clue
 #
-# Generated at: 2026-08-07T13:04:19+03:00
+# Generated at: 2026-08-07T13:12:58+03:00
 # License: MIT
 import std/[strformat, options, json]
 import ./metaclient
