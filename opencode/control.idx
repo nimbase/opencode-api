@@ -1,0 +1,4 @@
+nimTitle	control	opencode/control.html	module opencode/control		0
+nim	putAuthProviderID	opencode/control.html#putAuthProviderID,OpencodeClient,string,	proc putAuthProviderID(client: OpencodeClient; providerID: string; body: types.Auth): Future[\n    bool]		19
+nim	deleteAuthProviderID	opencode/control.html#deleteAuthProviderID,OpencodeClient,string	proc deleteAuthProviderID(client: OpencodeClient; providerID: string): Future[bool]		30
+nim	postLog	opencode/control.html#postLog,OpencodeClient,string,string,PostLogRequest	proc postLog(client: OpencodeClient; directory: string = default(string);\n        workspace: string = default(string); body: PostLogRequest): Future[bool]		42

@@ -1,0 +1,8 @@
+nimTitle	opencode_httpapi	opencode/opencode_httpapi.html	module opencode/opencode_httpapi		0
+nim	GetApiHealthResponse	opencode/opencode_httpapi.html#GetApiHealthResponse	object GetApiHealthResponse		12
+nim	GetApiAgentResponse	opencode/opencode_httpapi.html#GetApiAgentResponse	object GetApiAgentResponse		14
+nim	getApiHealth	opencode/opencode_httpapi.html#getApiHealth,OpencodeClient	proc getApiHealth(client: OpencodeClient): Future[GetApiHealthResponse]		20
+nim	getApiLocation	opencode/opencode_httpapi.html#getApiLocation,OpencodeClient,JsonNode	proc getApiLocation(client: OpencodeClient; location: JsonNode = default(JsonNode)): Future[\n    LocationInfo]		32
+nim	getApiAgent	opencode/opencode_httpapi.html#getApiAgent,OpencodeClient,JsonNode	proc getApiAgent(client: OpencodeClient; location: JsonNode = default(JsonNode)): Future[\n    GetApiAgentResponse]		45
+nim	deleteApiCredentialCredentialID	opencode/opencode_httpapi.html#deleteApiCredentialCredentialID,OpencodeClient,string,JsonNode	proc deleteApiCredentialCredentialID(client: OpencodeClient; credentialID: string;\n                                location: JsonNode = default(JsonNode)): Future[\n    AsyncResponse]		60
+nim	patchApiCredentialCredentialID	opencode/opencode_httpapi.html#patchApiCredentialCredentialID,OpencodeClient,string,JsonNode,PatchApiCredentialCredentialIDRequest	proc patchApiCredentialCredentialID(client: OpencodeClient; credentialID: string;\n                               location: JsonNode = default(JsonNode);\n                               body: PatchApiCredentialCredentialIDRequest): Future[\n    AsyncResponse]		71

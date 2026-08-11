@@ -1,0 +1,3 @@
+nimTitle	skills	opencode/skills.html	module opencode/skills		0
+nim	GetApiSkillResponse	opencode/skills.html#GetApiSkillResponse	object GetApiSkillResponse		12
+nim	getApiSkill	opencode/skills.html#getApiSkill,OpencodeClient,JsonNode	proc getApiSkill(client: OpencodeClient; location: JsonNode = default(JsonNode)): Future[\n    GetApiSkillResponse]		16

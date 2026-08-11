@@ -1,0 +1,17 @@
+nimTitle	instance	opencode/instance.html	module opencode/instance		0
+nim	PostVcsApplyResponse	opencode/instance.html#PostVcsApplyResponse	object PostVcsApplyResponse		14
+nim	modeGit	opencode/instance.html#modeGit	InstanceModeOption.modeGit		17
+nim	modeBranch	opencode/instance.html#modeBranch	InstanceModeOption.modeBranch		17
+nim	InstanceModeOption	opencode/instance.html#InstanceModeOption	enum InstanceModeOption		17
+nim	postInstanceDispose	opencode/instance.html#postInstanceDispose,OpencodeClient,string,string	proc postInstanceDispose(client: OpencodeClient; directory: string = default(string);\n                    workspace: string = default(string)): Future[bool]		24
+nim	getPath	opencode/instance.html#getPath,OpencodeClient,string,string	proc getPath(client: OpencodeClient; directory: string = default(string);\n        workspace: string = default(string)): Future[Path]		39
+nim	getVcs	opencode/instance.html#getVcs,OpencodeClient,string,string	proc getVcs(client: OpencodeClient; directory: string = default(string);\n       workspace: string = default(string)): Future[VcsInfo]		55
+nim	getVcsStatus	opencode/instance.html#getVcsStatus,OpencodeClient,string,string	proc getVcsStatus(client: OpencodeClient; directory: string = default(string);\n             workspace: string = default(string)): Future[\n    seq[types.VcsFileStatus]]		71
+nim	getVcsDiff	opencode/instance.html#getVcsDiff,OpencodeClient,string,string,set[InstanceModeOption],int64	proc getVcsDiff(client: OpencodeClient; directory: string = default(string);\n           workspace: string = default(string);\n           mode: set[InstanceModeOption] = {}; context: int64 = default(int64)): Future[\n    seq[types.VcsFileDiff]]		88
+nim	getVcsDiffRaw	opencode/instance.html#getVcsDiffRaw,OpencodeClient,string,string	proc getVcsDiffRaw(client: OpencodeClient; directory: string = default(string);\n              workspace: string = default(string)): Future[AsyncResponse]		106
+nim	postVcsApply	opencode/instance.html#postVcsApply,OpencodeClient,string,string,PostVcsApplyRequest	proc postVcsApply(client: OpencodeClient; directory: string = default(string);\n             workspace: string = default(string); body: PostVcsApplyRequest): Future[\n    PostVcsApplyResponse]		117
+nim	getCommand	opencode/instance.html#getCommand,OpencodeClient,string,string	proc getCommand(client: OpencodeClient; directory: string = default(string);\n           workspace: string = default(string)): Future[seq[types.Command]]		132
+nim	getAgent	opencode/instance.html#getAgent,OpencodeClient,string,string	proc getAgent(client: OpencodeClient; directory: string = default(string);\n         workspace: string = default(string)): Future[seq[types.Agent]]		147
+nim	getSkill	opencode/instance.html#getSkill,OpencodeClient,string,string	proc getSkill(client: OpencodeClient; directory: string = default(string);\n         workspace: string = default(string)): Future[seq[JsonNode]]		162
+nim	getLsp	opencode/instance.html#getLsp,OpencodeClient,string,string	proc getLsp(client: OpencodeClient; directory: string = default(string);\n       workspace: string = default(string)): Future[seq[types.LSPStatus]]		177
+nim	getFormatter	opencode/instance.html#getFormatter,OpencodeClient,string,string	proc getFormatter(client: OpencodeClient; directory: string = default(string);\n             workspace: string = default(string)): Future[\n    seq[types.FormatterStatus]]		192

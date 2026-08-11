@@ -1,0 +1,7 @@
+nimTitle	sync	opencode/sync.html	module opencode/sync		0
+nim	PostSyncReplayResponse	opencode/sync.html#PostSyncReplayResponse	object PostSyncReplayResponse		14
+nim	PostSyncStealResponse	opencode/sync.html#PostSyncStealResponse	object PostSyncStealResponse		19
+nim	postSyncStart	opencode/sync.html#postSyncStart,OpencodeClient,string,string	proc postSyncStart(client: OpencodeClient; directory: string = default(string);\n              workspace: string = default(string)): Future[bool]		24
+nim	postSyncReplay	opencode/sync.html#postSyncReplay,OpencodeClient,string,string,PostSyncReplayRequest	proc postSyncReplay(client: OpencodeClient; directory: string = default(string);\n               workspace: string = default(string); body: PostSyncReplayRequest): Future[\n    PostSyncReplayResponse]		41
+nim	postSyncSteal	opencode/sync.html#postSyncSteal,OpencodeClient,string,string,PostSyncStealRequest	proc postSyncSteal(client: OpencodeClient; directory: string = default(string);\n              workspace: string = default(string); body: PostSyncStealRequest): Future[\n    PostSyncStealResponse]		57
+nim	postSyncHistory	opencode/sync.html#postSyncHistory,OpencodeClient,string,string	proc postSyncHistory(client: OpencodeClient; directory: string = default(string);\n                workspace: string = default(string)): Future[seq[JsonNode]]		74

@@ -1,0 +1,2 @@
+nimTitle	events	opencode/events.html	module opencode/events		0
+nim	getApiEvent	opencode/events.html#getApiEvent,OpencodeClient	proc getApiEvent(client: OpencodeClient): Future[AsyncResponse]		10

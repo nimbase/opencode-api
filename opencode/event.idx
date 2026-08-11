@@ -1,0 +1,2 @@
+nimTitle	event	opencode/event.html	module opencode/event		0
+nim	getEvent	opencode/event.html#getEvent,OpencodeClient,string,string	proc getEvent(client: OpencodeClient; directory: string = default(string);\n         workspace: string = default(string)): Future[AsyncResponse]		11

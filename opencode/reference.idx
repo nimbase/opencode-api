@@ -1,0 +1,3 @@
+nimTitle	reference	opencode/reference.html	module opencode/reference		0
+nim	GetApiReferenceResponse	opencode/reference.html#GetApiReferenceResponse	object GetApiReferenceResponse		12
+nim	getApiReference	opencode/reference.html#getApiReference,OpencodeClient,JsonNode	proc getApiReference(client: OpencodeClient; location: JsonNode = default(JsonNode)): Future[\n    GetApiReferenceResponse]		17

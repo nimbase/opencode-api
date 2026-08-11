@@ -1,0 +1,5 @@
+nimTitle	config	opencode/config.html	module opencode/config		0
+nim	GetConfigProvidersResponse	opencode/config.html#GetConfigProvidersResponse	object GetConfigProvidersResponse		12
+nim	getConfig	opencode/config.html#getConfig,OpencodeClient,string,string	proc getConfig(client: OpencodeClient; directory: string = default(string);\n          workspace: string = default(string)): Future[Config]		18
+nim	patchConfig	opencode/config.html#patchConfig,OpencodeClient,string,string,	proc patchConfig(client: OpencodeClient; directory: string = default(string);\n            workspace: string = default(string); body: types.Config): Future[\n    Config]		33
+nim	getConfigProviders	opencode/config.html#getConfigProviders,OpencodeClient,string,string	proc getConfigProviders(client: OpencodeClient; directory: string = default(string);\n                   workspace: string = default(string)): Future[\n    GetConfigProvidersResponse]		49

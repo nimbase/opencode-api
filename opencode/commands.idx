@@ -1,0 +1,3 @@
+nimTitle	commands	opencode/commands.html	module opencode/commands		0
+nim	GetApiCommandResponse	opencode/commands.html#GetApiCommandResponse	object GetApiCommandResponse		12
+nim	getApiCommand	opencode/commands.html#getApiCommand,OpencodeClient,JsonNode	proc getApiCommand(client: OpencodeClient; location: JsonNode = default(JsonNode)): Future[\n    GetApiCommandResponse]		17

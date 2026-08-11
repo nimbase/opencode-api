@@ -1,0 +1,24 @@
+nimTitle	metaclient	opencode/private/metaclient.html	module opencode/private/metaclient		0
+nim	OpencodeClient	opencode/private/metaclient.html#OpencodeClient	type OpencodeClient		20
+nim	QueryTable	opencode/private/metaclient.html#QueryTable	type QueryTable		25
+nim	OpencodeClientError	opencode/private/metaclient.html#OpencodeClientError	object OpencodeClientError		27
+nim	`$`	opencode/private/metaclient.html#$,QueryTable	proc `$`(query: QueryTable): string		29
+nim	initOpencodeClient	opencode/private/metaclient.html#initOpencodeClient,string	proc initOpencodeClient(apiKey: string): OpencodeClient		34
+nim	httpGet	opencode/private/metaclient.html#httpGet,OpencodeClient,string	proc httpGet(client: OpencodeClient; endpoint: string): Future[AsyncResponse]		45
+nim	httpGet	opencode/private/metaclient.html#httpGet,OpencodeClient,string,QueryTable	proc httpGet(client: OpencodeClient; endpoint: string; query: QueryTable): Future[\n    AsyncResponse]		50
+nim	httpPost	opencode/private/metaclient.html#httpPost,OpencodeClient,string,T	proc httpPost[T](client: OpencodeClient; endpoint: string; body: T): Future[\n    AsyncResponse]		55
+nim	httpPost	opencode/private/metaclient.html#httpPost,OpencodeClient,string	proc httpPost(client: OpencodeClient; endpoint: string): Future[AsyncResponse]		60
+nim	httpPost	opencode/private/metaclient.html#httpPost,OpencodeClient,string,QueryTable	proc httpPost(client: OpencodeClient; endpoint: string; query: QueryTable): Future[\n    AsyncResponse]		65
+nim	httpPut	opencode/private/metaclient.html#httpPut,OpencodeClient,string,T	proc httpPut[T](client: OpencodeClient; endpoint: string; body: T): Future[\n    AsyncResponse]		70
+nim	httpPut	opencode/private/metaclient.html#httpPut,OpencodeClient,string	proc httpPut(client: OpencodeClient; endpoint: string): Future[AsyncResponse]		76
+nim	httpPut	opencode/private/metaclient.html#httpPut,OpencodeClient,string,QueryTable	proc httpPut(client: OpencodeClient; endpoint: string; query: QueryTable): Future[\n    AsyncResponse]		81
+nim	httpDelete	opencode/private/metaclient.html#httpDelete,OpencodeClient,string,T	proc httpDelete[T](client: OpencodeClient; endpoint: string; body: T): Future[\n    AsyncResponse]		86
+nim	httpDelete	opencode/private/metaclient.html#httpDelete,OpencodeClient,string	proc httpDelete(client: OpencodeClient; endpoint: string): Future[AsyncResponse]		92
+nim	httpDelete	opencode/private/metaclient.html#httpDelete,OpencodeClient,string,QueryTable	proc httpDelete(client: OpencodeClient; endpoint: string; query: QueryTable): Future[\n    AsyncResponse]		97
+nim	httpPatch	opencode/private/metaclient.html#httpPatch,OpencodeClient,string,T	proc httpPatch[T](client: OpencodeClient; endpoint: string; body: T): Future[\n    AsyncResponse]		102
+nim	httpPatch	opencode/private/metaclient.html#httpPatch,OpencodeClient,string	proc httpPatch(client: OpencodeClient; endpoint: string): Future[AsyncResponse]		108
+nimgrp	httpput	opencode/private/metaclient.html#httpPut-procs-all	proc		69
+nimgrp	httppost	opencode/private/metaclient.html#httpPost-procs-all	proc		54
+nimgrp	httpdelete	opencode/private/metaclient.html#httpDelete-procs-all	proc		85
+nimgrp	httpget	opencode/private/metaclient.html#httpGet-procs-all	proc		44
+nimgrp	httppatch	opencode/private/metaclient.html#httpPatch-procs-all	proc		101

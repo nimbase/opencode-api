@@ -1,0 +1,8 @@
+nimTitle	global	opencode/global.html	module opencode/global		0
+nim	GetGlobalHealthResponse	opencode/global.html#GetGlobalHealthResponse	object GetGlobalHealthResponse		12
+nim	getGlobalHealth	opencode/global.html#getGlobalHealth,OpencodeClient	proc getGlobalHealth(client: OpencodeClient): Future[GetGlobalHealthResponse]		19
+nim	getGlobalEvent	opencode/global.html#getGlobalEvent,OpencodeClient	proc getGlobalEvent(client: OpencodeClient): Future[AsyncResponse]		30
+nim	getGlobalConfig	opencode/global.html#getGlobalConfig,OpencodeClient	proc getGlobalConfig(client: OpencodeClient): Future[Config]		36
+nim	patchGlobalConfig	opencode/global.html#patchGlobalConfig,OpencodeClient,	proc patchGlobalConfig(client: OpencodeClient; body: types.Config): Future[Config]		47
+nim	postGlobalDispose	opencode/global.html#postGlobalDispose,OpencodeClient	proc postGlobalDispose(client: OpencodeClient): Future[bool]		58
+nim	postGlobalUpgrade	opencode/global.html#postGlobalUpgrade,OpencodeClient,PostGlobalUpgradeRequest	proc postGlobalUpgrade(client: OpencodeClient; body: PostGlobalUpgradeRequest): Future[\n    JsonNode]		69

@@ -1,0 +1,7 @@
+nimTitle	session_questions	opencode/session_questions.html	module opencode/session_questions		0
+nim	GetApiQuestionRequestResponse	opencode/session_questions.html#GetApiQuestionRequestResponse	object GetApiQuestionRequestResponse		12
+nim	GetApiSessionSessionIDQuestionResponse	opencode/session_questions.html#GetApiSessionSessionIDQuestionResponse	object GetApiSessionSessionIDQuestionResponse		15
+nim	getApiQuestionRequest	opencode/session_questions.html#getApiQuestionRequest,OpencodeClient,JsonNode	proc getApiQuestionRequest(client: OpencodeClient;\n                      location: JsonNode = default(JsonNode)): Future[\n    GetApiQuestionRequestResponse]		19
+nim	getApiSessionSessionIDQuestion	opencode/session_questions.html#getApiSessionSessionIDQuestion,OpencodeClient,string	proc getApiSessionSessionIDQuestion(client: OpencodeClient; sessionID: string): Future[\n    GetApiSessionSessionIDQuestionResponse]		32
+nim	postApiSessionSessionIDQuestionRequestIDReply	opencode/session_questions.html#postApiSessionSessionIDQuestionRequestIDReply,OpencodeClient,string,string,	proc postApiSessionSessionIDQuestionRequestIDReply(client: OpencodeClient;\n    sessionID: string; requestID: string; body: types.QuestionV2Reply): Future[\n    AsyncResponse]		46
+nim	postApiSessionSessionIDQuestionRequestIDReject	opencode/session_questions.html#postApiSessionSessionIDQuestionRequestIDReject,OpencodeClient,string,string	proc postApiSessionSessionIDQuestionRequestIDReject(client: OpencodeClient;\n    sessionID: string; requestID: string): Future[AsyncResponse]		54

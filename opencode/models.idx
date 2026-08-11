@@ -1,0 +1,3 @@
+nimTitle	models	opencode/models.html	module opencode/models		0
+nim	GetApiModelResponse	opencode/models.html#GetApiModelResponse	object GetApiModelResponse		12
+nim	getApiModel	opencode/models.html#getApiModel,OpencodeClient,JsonNode	proc getApiModel(client: OpencodeClient; location: JsonNode = default(JsonNode)): Future[\n    GetApiModelResponse]		16

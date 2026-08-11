@@ -1,0 +1,5 @@
+nimTitle	messages	opencode/messages.html	module opencode/messages		0
+nim	orderAsc	opencode/messages.html#orderAsc	MessageOrderOption.orderAsc		12
+nim	orderDesc	opencode/messages.html#orderDesc	MessageOrderOption.orderDesc		12
+nim	MessageOrderOption	opencode/messages.html#MessageOrderOption	enum MessageOrderOption		12
+nim	getApiSessionSessionIDMessage	opencode/messages.html#getApiSessionSessionIDMessage,OpencodeClient,string,float64,set[MessageOrderOption],string	proc getApiSessionSessionIDMessage(client: OpencodeClient; sessionID: string;\n                              limit: float64 = default(float64);\n                              order: set[MessageOrderOption] = {};\n                              cursor: string = default(string)): Future[\n    SessionMessagesResponse]		20

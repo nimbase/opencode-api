@@ -1,0 +1,5 @@
+nimTitle	providers	opencode/providers.html	module opencode/providers		0
+nim	GetApiProviderResponse	opencode/providers.html#GetApiProviderResponse	object GetApiProviderResponse		12
+nim	GetApiProviderProviderIDResponse	opencode/providers.html#GetApiProviderProviderIDResponse	object GetApiProviderProviderIDResponse		15
+nim	getApiProvider	opencode/providers.html#getApiProvider,OpencodeClient,JsonNode	proc getApiProvider(client: OpencodeClient; location: JsonNode = default(JsonNode)): Future[\n    GetApiProviderResponse]		20
+nim	getApiProviderProviderID	opencode/providers.html#getApiProviderProviderID,OpencodeClient,string,JsonNode	proc getApiProviderProviderID(client: OpencodeClient; providerID: string;\n                         location: JsonNode = default(JsonNode)): Future[\n    GetApiProviderProviderIDResponse]		35

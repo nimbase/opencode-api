@@ -1,0 +1,2 @@
+nimTitle	controlplane	opencode/controlplane.html	module opencode/controlplane		0
+nim	postExperimentalControlPlaneMoveSession	opencode/controlplane.html#postExperimentalControlPlaneMoveSession,OpencodeClient,PostExperimentalControlPlaneMoveSessionRequest	proc postExperimentalControlPlaneMoveSession(client: OpencodeClient; body: PostExperimentalControlPlaneMoveSessionRequest): Future[\n    AsyncResponse]		18

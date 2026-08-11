@@ -1,0 +1,9 @@
+nimTitle	filesystem	opencode/filesystem.html	module opencode/filesystem		0
+nim	GetApiFsListResponse	opencode/filesystem.html#GetApiFsListResponse	object GetApiFsListResponse		12
+nim	GetApiFsFindResponse	opencode/filesystem.html#GetApiFsFindResponse	object GetApiFsFindResponse		15
+nim	typeFile	opencode/filesystem.html#typeFile	FilesystemTypeOption.typeFile		18
+nim	typeDirectory	opencode/filesystem.html#typeDirectory	FilesystemTypeOption.typeDirectory		18
+nim	FilesystemTypeOption	opencode/filesystem.html#FilesystemTypeOption	enum FilesystemTypeOption		18
+nim	getApiFsRead	opencode/filesystem.html#getApiFsRead,OpencodeClient,JsonNode	proc getApiFsRead(client: OpencodeClient; location: JsonNode = default(JsonNode)): Future[\n    AsyncResponse]		24
+nim	getApiFsList	opencode/filesystem.html#getApiFsList,OpencodeClient,JsonNode,string	proc getApiFsList(client: OpencodeClient; location: JsonNode = default(JsonNode);\n             path: string = default(string)): Future[GetApiFsListResponse]		34
+nim	getApiFsFind	opencode/filesystem.html#getApiFsFind,OpencodeClient,JsonNode,string,set[FilesystemTypeOption],string	proc getApiFsFind(client: OpencodeClient; location: JsonNode = default(JsonNode);\n             query: string; type: set[FilesystemTypeOption] = {};\n             limit: string = default(string)): Future[GetApiFsFindResponse]		51

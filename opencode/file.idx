@@ -1,0 +1,13 @@
+nimTitle	file	opencode/file.html	module opencode/file		0
+nim	dirsTrue	opencode/file.html#dirsTrue	FileDirsOption.dirsTrue		12
+nim	dirsFalse	opencode/file.html#dirsFalse	FileDirsOption.dirsFalse		12
+nim	FileDirsOption	opencode/file.html#FileDirsOption	enum FileDirsOption		12
+nim	typeFile	opencode/file.html#typeFile	FileTypeOption.typeFile		16
+nim	typeDirectory	opencode/file.html#typeDirectory	FileTypeOption.typeDirectory		16
+nim	FileTypeOption	opencode/file.html#FileTypeOption	enum FileTypeOption		16
+nim	getFind	opencode/file.html#getFind,OpencodeClient,string,string,string	proc getFind(client: OpencodeClient; directory: string = default(string);\n        workspace: string = default(string); pattern: string): Future[\n    seq[JsonNode]]		22
+nim	getFindFile	opencode/file.html#getFindFile,OpencodeClient,string,string,string,set[FileDirsOption],set[FileTypeOption],int64	proc getFindFile(client: OpencodeClient; directory: string = default(string);\n            workspace: string = default(string); query: string;\n            dirs: set[FileDirsOption] = {}; type: set[FileTypeOption] = {};\n            limit: int64 = default(int64)): Future[seq[string]]		41
+nim	getFindSymbol	opencode/file.html#getFindSymbol,OpencodeClient,string,string,string	proc getFindSymbol(client: OpencodeClient; directory: string = default(string);\n              workspace: string = default(string); query: string): Future[\n    seq[types.Symbol]]		60
+nim	getFile	opencode/file.html#getFile,OpencodeClient,string,string,string	proc getFile(client: OpencodeClient; directory: string = default(string);\n        workspace: string = default(string); path: string): Future[\n    seq[types.FileNode]]		76
+nim	getFileContent	opencode/file.html#getFileContent,OpencodeClient,string,string,string	proc getFileContent(client: OpencodeClient; directory: string = default(string);\n               workspace: string = default(string); path: string): Future[\n    FileContent]		92
+nim	getFileStatus	opencode/file.html#getFileStatus,OpencodeClient,string,string	proc getFileStatus(client: OpencodeClient; directory: string = default(string);\n              workspace: string = default(string)): Future[seq[types.File]]		108
