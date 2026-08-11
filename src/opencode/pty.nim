@@ -1,51 +1,50 @@
 # opencode API client for Nim
 #
 # Auto-generated from OpenAPI 3.x specification
-# Clue CLI Assistant https://github.com/openpeeps/clue
+# Nimbase CLI https://github.com/nimbase/nimbase
 #
-# Generated at: 2026-08-07T13:12:58+03:00
 # License: MIT
 import std/[strformat, options, json]
-import ./metaclient
-import ./types
+import ./private/metaclient
+import ./private/types
 
 type
-  PtyRequest = object
+  PostPtyRequest = object
     command: Option[string]
     args: Option[seq[string]]
     cwd: Option[string]
     title: Option[string]
     env: Option[JsonNode]
-  PtyPtyIDRequest = object
+  PutPtyPtyIDRequest = object
     title: Option[string]
     size: Option[JsonNode]
   GetApiPtyResponse* = object
-    location: LocationInfo
-    data: seq[Pty]
-  ApiPtyRequest = object
+    location: types.LocationInfo
+    data: seq[types.Pty]
+  PostApiPtyRequest = object
     command: Option[string]
     args: Option[seq[string]]
     cwd: Option[string]
     title: Option[string]
     env: Option[JsonNode]
   PostApiPtyResponse* = object
-    location: LocationInfo
-    data: Pty
+    location: types.LocationInfo
+    data: types.Pty
   GetApiPtyPtyIDResponse* = object
-    location: LocationInfo
-    data: Pty
-  ApiPtyPtyIDRequest = object
+    location: types.LocationInfo
+    data: types.Pty
+  PutApiPtyPtyIDRequest = object
     title: Option[string]
     size: Option[JsonNode]
   PutApiPtyPtyIDResponse* = object
-    location: LocationInfo
-    data: Pty
+    location: types.LocationInfo
+    data: types.Pty
   PostApiPtyPtyIDConnectTokenResponse* = object
-    location: LocationInfo
-    data: PtyTicketConnectToken
+    location: types.LocationInfo
+    data: types.PtyTicketConnectToken
 
 proc getPtyShells*(client: OpencodeClient, directory: string = default(string),
-                   workspace: string = default(string)): Future[GetPtyShellsResponse] {.async.} =
+                   workspace: string = default(string)): Future[seq[JsonNode]] {.async.} =
   ## Get a list of available shells on the system.
 
   var q = initOrderedTable[string, string]()
@@ -55,12 +54,12 @@ proc getPtyShells*(client: OpencodeClient, directory: string = default(string),
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetPtyShellsResponse)
+    result = fromJson(body, seq[JsonNode])
   else:
     raise newException(OpencodeClientError, body)
 
 proc getPty*(client: OpencodeClient, directory: string = default(string),
-             workspace: string = default(string)): Future[GetPtyResponse] {.async.} =
+             workspace: string = default(string)): Future[seq[types.Pty]] {.async.} =
   ## Get a list of all active pseudo-terminal (PTY) sessions managed by OpenCode.
 
   var q = initOrderedTable[string, string]()
@@ -70,12 +69,12 @@ proc getPty*(client: OpencodeClient, directory: string = default(string),
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetPtyResponse)
+    result = fromJson(body, seq[types.Pty])
   else:
     raise newException(OpencodeClientError, body)
 
 proc postPty*(client: OpencodeClient, directory: string = default(string),
-              workspace: string = default(string), body: PtyRequest): Future[Pty] {.async.} =
+              workspace: string = default(string), body: PostPtyRequest): Future[types.Pty] {.async.} =
   ## Create a new pseudo-terminal (PTY) session for running shell commands and
   ## processes.
 
@@ -86,13 +85,13 @@ proc postPty*(client: OpencodeClient, directory: string = default(string),
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, Pty)
+    result = fromJson(body, types.Pty)
   else:
     raise newException(OpencodeClientError, body)
 
 proc getPtyPtyID*(client: OpencodeClient, ptyID: string,
                   directory: string = default(string),
-                  workspace: string = default(string)): Future[Pty] {.async.} =
+                  workspace: string = default(string)): Future[types.Pty] {.async.} =
   ## Retrieve detailed information about a specific pseudo-terminal (PTY) session.
 
   var q = initOrderedTable[string, string]()
@@ -102,13 +101,13 @@ proc getPtyPtyID*(client: OpencodeClient, ptyID: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, Pty)
+    result = fromJson(body, types.Pty)
   else:
     raise newException(OpencodeClientError, body)
 
 proc putPtyPtyID*(client: OpencodeClient, ptyID: string,
                   directory: string = default(string),
-                  workspace: string = default(string), body: PtyPtyIDRequest): Future[Pty] {.async.} =
+                  workspace: string = default(string), body: PutPtyPtyIDRequest): Future[types.Pty] {.async.} =
   ## Update properties of an existing pseudo-terminal (PTY) session.
 
   var q = initOrderedTable[string, string]()
@@ -118,13 +117,13 @@ proc putPtyPtyID*(client: OpencodeClient, ptyID: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, Pty)
+    result = fromJson(body, types.Pty)
   else:
     raise newException(OpencodeClientError, body)
 
 proc deletePtyPtyID*(client: OpencodeClient, ptyID: string,
                      directory: string = default(string),
-                     workspace: string = default(string)): Future[DeletePtyPtyIDResponse] {.async.} =
+                     workspace: string = default(string)): Future[bool] {.async.} =
   ## Remove and terminate a specific pseudo-terminal (PTY) session.
 
   var q = initOrderedTable[string, string]()
@@ -134,13 +133,13 @@ proc deletePtyPtyID*(client: OpencodeClient, ptyID: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, DeletePtyPtyIDResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)
 
 proc postPtyPtyIDConnectToken*(client: OpencodeClient, ptyID: string,
                                directory: string = default(string),
-                               workspace: string = default(string)): Future[PtyTicketConnectToken] {.async.} =
+                               workspace: string = default(string)): Future[types.PtyTicketConnectToken] {.async.} =
   ## Create a short-lived ticket for opening a PTY WebSocket connection.
 
   var q = initOrderedTable[string, string]()
@@ -150,7 +149,7 @@ proc postPtyPtyIDConnectToken*(client: OpencodeClient, ptyID: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, PtyTicketConnectToken)
+    result = fromJson(body, types.PtyTicketConnectToken)
   else:
     raise newException(OpencodeClientError, body)
 
@@ -169,7 +168,7 @@ proc getApiPty*(client: OpencodeClient, location: JsonNode = default(JsonNode)):
     raise newException(OpencodeClientError, body)
 
 proc postApiPty*(client: OpencodeClient, location: JsonNode = default(JsonNode),
-                 body: ApiPtyRequest): Future[PostApiPtyResponse] {.async.} =
+                 body: PostApiPtyRequest): Future[PostApiPtyResponse] {.async.} =
   ## Create a pseudo-terminal session for a location.
 
   var q = initOrderedTable[string, string]()
@@ -198,7 +197,7 @@ proc getApiPtyPtyID*(client: OpencodeClient, ptyID: string,
 
 proc putApiPtyPtyID*(client: OpencodeClient, ptyID: string,
                      location: JsonNode = default(JsonNode),
-                     body: ApiPtyPtyIDRequest): Future[PutApiPtyPtyIDResponse] {.async.} =
+                     body: PutApiPtyPtyIDRequest): Future[PutApiPtyPtyIDResponse] {.async.} =
   ## Update the title or viewport size of one PTY session.
 
   var q = initOrderedTable[string, string]()
@@ -235,23 +234,23 @@ proc postApiPtyPtyIDConnectToken*(client: OpencodeClient, ptyID: string,
     raise newException(OpencodeClientError, body)
 
 proc getApiPtyPtyIDConnect*(client: OpencodeClient, ptyID: string,
-                            location[directory]: string = default(string),
-                            location[workspace]: string = default(string),
+                            locationDirectory: string = default(string),
+                            locationWorkspace: string = default(string),
                             cursor: string = default(string),
-                            ticket: string = default(string)): Future[GetApiPtyPtyIDConnectResponse] {.async.} =
+                            ticket: string = default(string)): Future[bool] {.async.} =
   ## Establish a WebSocket connection streaming PTY output and accepting terminal
   ## input.
 
   var q = initOrderedTable[string, string]()
-  q["location[directory]"] = $location[directory]
-  q["location[workspace]"] = $location[workspace]
+  q["location[directory]"] = $locationDirectory
+  q["location[workspace]"] = $locationWorkspace
   q["cursor"] = $cursor
   q["ticket"] = $ticket
   let res = await client.httpGET(fmt"/api/pty/{ptyID}/connect", q)
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetApiPtyPtyIDConnectResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)
 
@@ -259,7 +258,7 @@ proc getPtyPtyIDConnect*(client: OpencodeClient, ptyID: string,
                          directory: string = default(string),
                          workspace: string = default(string),
                          cursor: string = default(string),
-                         ticket: string = default(string)): Future[GetPtyPtyIDConnectResponse] {.async.} =
+                         ticket: string = default(string)): Future[bool] {.async.} =
   ## Establish a WebSocket connection to interact with a pseudo-terminal (PTY)
   ## session in real-time.
 
@@ -272,6 +271,6 @@ proc getPtyPtyIDConnect*(client: OpencodeClient, ptyID: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetPtyPtyIDConnectResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)

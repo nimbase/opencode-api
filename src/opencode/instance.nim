@@ -1,16 +1,15 @@
 # opencode API client for Nim
 #
 # Auto-generated from OpenAPI 3.x specification
-# Clue CLI Assistant https://github.com/openpeeps/clue
+# Nimbase CLI https://github.com/nimbase/nimbase
 #
-# Generated at: 2026-08-07T13:12:58+03:00
 # License: MIT
-import std/[strformat, options, json]
-import ./metaclient
-import ./types
+import std/[json]
+import ./private/metaclient
+import ./private/types
 
 type
-  VcsApplyRequest = object
+  PostVcsApplyRequest = object
     patch: string
   PostVcsApplyResponse* = object
     ## VCS patch applied
@@ -22,7 +21,7 @@ type
 
 proc postInstanceDispose*(client: OpencodeClient,
                           directory: string = default(string),
-                          workspace: string = default(string)): Future[PostInstanceDisposeResponse] {.async.} =
+                          workspace: string = default(string)): Future[bool] {.async.} =
   ## Clean up and dispose the current OpenCode instance, releasing all resources.
 
   var q = initOrderedTable[string, string]()
@@ -32,12 +31,12 @@ proc postInstanceDispose*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, PostInstanceDisposeResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)
 
 proc getPath*(client: OpencodeClient, directory: string = default(string),
-              workspace: string = default(string)): Future[Path] {.async.} =
+              workspace: string = default(string)): Future[types.Path] {.async.} =
   ## Retrieve the current working directory and related path information for the
   ## OpenCode instance.
 
@@ -48,12 +47,12 @@ proc getPath*(client: OpencodeClient, directory: string = default(string),
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, Path)
+    result = fromJson(body, types.Path)
   else:
     raise newException(OpencodeClientError, body)
 
 proc getVcs*(client: OpencodeClient, directory: string = default(string),
-             workspace: string = default(string)): Future[VcsInfo] {.async.} =
+             workspace: string = default(string)): Future[types.VcsInfo] {.async.} =
   ## Retrieve version control system (VCS) information for the current project, such
   ## as git branch.
 
@@ -64,12 +63,12 @@ proc getVcs*(client: OpencodeClient, directory: string = default(string),
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, VcsInfo)
+    result = fromJson(body, types.VcsInfo)
   else:
     raise newException(OpencodeClientError, body)
 
 proc getVcsStatus*(client: OpencodeClient, directory: string = default(string),
-                   workspace: string = default(string)): Future[GetVcsStatusResponse] {.async.} =
+                   workspace: string = default(string)): Future[seq[types.VcsFileStatus]] {.async.} =
   ## Retrieve changed files in the current working tree without patches.
 
   var q = initOrderedTable[string, string]()
@@ -79,14 +78,14 @@ proc getVcsStatus*(client: OpencodeClient, directory: string = default(string),
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetVcsStatusResponse)
+    result = fromJson(body, seq[types.VcsFileStatus])
   else:
     raise newException(OpencodeClientError, body)
 
 proc getVcsDiff*(client: OpencodeClient, directory: string = default(string),
                  workspace: string = default(string),
                  mode: set[InstanceModeOption] = {},
-                 context: int64 = default(int64)): Future[GetVcsDiffResponse] {.async.} =
+                 context: int64 = default(int64)): Future[seq[types.VcsFileDiff]] {.async.} =
   ## Retrieve the current git diff for the working tree or against the default
   ## branch.
 
@@ -99,7 +98,7 @@ proc getVcsDiff*(client: OpencodeClient, directory: string = default(string),
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetVcsDiffResponse)
+    result = fromJson(body, seq[types.VcsFileDiff])
   else:
     raise newException(OpencodeClientError, body)
 
@@ -114,7 +113,8 @@ proc getVcsDiffRaw*(client: OpencodeClient, directory: string = default(string),
   return res
 
 proc postVcsApply*(client: OpencodeClient, directory: string = default(string),
-                   workspace: string = default(string), body: VcsApplyRequest): Future[PostVcsApplyResponse] {.async.} =
+                   workspace: string = default(string),
+                   body: PostVcsApplyRequest): Future[PostVcsApplyResponse] {.async.} =
   ## Apply a raw patch to the current working tree.
 
   var q = initOrderedTable[string, string]()
@@ -129,7 +129,7 @@ proc postVcsApply*(client: OpencodeClient, directory: string = default(string),
     raise newException(OpencodeClientError, body)
 
 proc getCommand*(client: OpencodeClient, directory: string = default(string),
-                 workspace: string = default(string)): Future[GetCommandResponse] {.async.} =
+                 workspace: string = default(string)): Future[seq[types.Command]] {.async.} =
   ## Get a list of all available commands in the OpenCode system.
 
   var q = initOrderedTable[string, string]()
@@ -139,12 +139,12 @@ proc getCommand*(client: OpencodeClient, directory: string = default(string),
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetCommandResponse)
+    result = fromJson(body, seq[types.Command])
   else:
     raise newException(OpencodeClientError, body)
 
 proc getAgent*(client: OpencodeClient, directory: string = default(string),
-               workspace: string = default(string)): Future[GetAgentResponse] {.async.} =
+               workspace: string = default(string)): Future[seq[types.Agent]] {.async.} =
   ## Get a list of all available AI agents in the OpenCode system.
 
   var q = initOrderedTable[string, string]()
@@ -154,12 +154,12 @@ proc getAgent*(client: OpencodeClient, directory: string = default(string),
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetAgentResponse)
+    result = fromJson(body, seq[types.Agent])
   else:
     raise newException(OpencodeClientError, body)
 
 proc getSkill*(client: OpencodeClient, directory: string = default(string),
-               workspace: string = default(string)): Future[GetSkillResponse] {.async.} =
+               workspace: string = default(string)): Future[seq[JsonNode]] {.async.} =
   ## Get a list of all available skills in the OpenCode system.
 
   var q = initOrderedTable[string, string]()
@@ -169,12 +169,12 @@ proc getSkill*(client: OpencodeClient, directory: string = default(string),
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetSkillResponse)
+    result = fromJson(body, seq[JsonNode])
   else:
     raise newException(OpencodeClientError, body)
 
 proc getLsp*(client: OpencodeClient, directory: string = default(string),
-             workspace: string = default(string)): Future[GetLspResponse] {.async.} =
+             workspace: string = default(string)): Future[seq[types.LSPStatus]] {.async.} =
   ## Get LSP server status
 
   var q = initOrderedTable[string, string]()
@@ -184,12 +184,12 @@ proc getLsp*(client: OpencodeClient, directory: string = default(string),
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetLspResponse)
+    result = fromJson(body, seq[types.LSPStatus])
   else:
     raise newException(OpencodeClientError, body)
 
 proc getFormatter*(client: OpencodeClient, directory: string = default(string),
-                   workspace: string = default(string)): Future[GetFormatterResponse] {.async.} =
+                   workspace: string = default(string)): Future[seq[types.FormatterStatus]] {.async.} =
   ## Get formatter status
 
   var q = initOrderedTable[string, string]()
@@ -199,6 +199,6 @@ proc getFormatter*(client: OpencodeClient, directory: string = default(string),
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetFormatterResponse)
+    result = fromJson(body, seq[types.FormatterStatus])
   else:
     raise newException(OpencodeClientError, body)

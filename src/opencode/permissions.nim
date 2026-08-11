@@ -1,36 +1,35 @@
 # opencode API client for Nim
 #
 # Auto-generated from OpenAPI 3.x specification
-# Clue CLI Assistant https://github.com/openpeeps/clue
+# Nimbase CLI https://github.com/nimbase/nimbase
 #
-# Generated at: 2026-08-07T13:12:58+03:00
 # License: MIT
 import std/[strformat, options, json]
-import ./metaclient
-import ./types
+import ./private/metaclient
+import ./private/types
 
 type
   GetApiPermissionRequestResponse* = object
-    location: LocationInfo
-    data: seq[PermissionV2Request]
+    location: types.LocationInfo
+    data: seq[types.PermissionV2Request]
   GetApiPermissionSavedResponse* = object
-    data: seq[PermissionSavedInfo]
+    data: seq[types.PermissionSavedInfo]
   GetApiSessionSessionIDPermissionResponse* = object
-    data: seq[PermissionV2Request]
-  ApiSessionSessionIDPermissionRequest = object
+    data: seq[types.PermissionV2Request]
+  PostApiSessionSessionIDPermissionRequest = object
     id: Option[string]
     action: string
     resources: seq[string]
     save: Option[seq[string]]
     metadata: Option[JsonNode]
-    source: Option[PermissionV2Source]
+    source: Option[types.PermissionV2Source]
     agent: Option[string]
   PostApiSessionSessionIDPermissionResponse* = object
     data: JsonNode
   GetApiSessionSessionIDPermissionRequestIDResponse* = object
-    data: PermissionV2Request
-  ApiSessionSessionIDPermissionRequestIDReplyRequest = object
-    reply: PermissionV2Reply
+    data: types.PermissionV2Request
+  PostApiSessionSessionIDPermissionRequestIDReplyRequest = object
+    reply: types.PermissionV2Reply
     message: Option[string]
 
 proc getApiPermissionRequest*(client: OpencodeClient,
@@ -80,7 +79,7 @@ proc getApiSessionSessionIDPermission*(client: OpencodeClient, sessionID: string
 
 proc postApiSessionSessionIDPermission*(client: OpencodeClient,
                                         sessionID: string,
-                                        body: ApiSessionSessionIDPermissionRequest): Future[PostApiSessionSessionIDPermissionResponse] {.async.} =
+                                        body: PostApiSessionSessionIDPermissionRequest): Future[PostApiSessionSessionIDPermissionResponse] {.async.} =
   ## Evaluate and, when approval is required, create a permission request for a
   ## session.
 
@@ -108,7 +107,7 @@ proc getApiSessionSessionIDPermissionRequestID*(client: OpencodeClient,
 proc postApiSessionSessionIDPermissionRequestIDReply*(client: OpencodeClient,
                                                       sessionID: string,
                                                       requestID: string,
-                                                      body: ApiSessionSessionIDPermissionRequestIDReplyRequest): Future[AsyncResponse] {.async.} =
+                                                      body: PostApiSessionSessionIDPermissionRequestIDReplyRequest): Future[AsyncResponse] {.async.} =
   ## Respond to a pending permission request owned by a session.
 
   let res = await client.httpPOST(fmt"/api/session/{sessionID}/permission/{requestID}/reply", body)

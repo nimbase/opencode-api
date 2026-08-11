@@ -1,5 +1,4 @@
 import std/[options, json]
-import ./metaclient
 
 type
   Event* = ref object of RootObj
@@ -34,10 +33,10 @@ type
   Auth* = ref object of RootObj
 
   EffectHttpApiErrorBadRequest* = ref object of RootObj
-    _tag*: string
+    tag*: string
 
   InvalidRequestError* = ref object of RootObj
-    _tag*: string
+    tag*: string
     message*: string
     kind*: Option[string]
     field*: Option[string]
@@ -62,6 +61,8 @@ type
     permission*: string
     pattern*: string
     action*: PermissionAction
+
+  PermissionRuleset* = seq[PermissionRule]
 
   Session* = ref object of RootObj
     id*: string
@@ -377,6 +378,8 @@ type
     message_i_d*: string
     call_i_d*: string
 
+  QuestionAnswer* = seq[string]
+
   GlobalEvent* = ref object of RootObj
     directory*: string
     project*: Option[string]
@@ -482,7 +485,7 @@ type
     image*: Option[ImageAttachmentConfig]
 
   Config* = ref object of RootObj
-    $schema*: Option[string]
+    schema*: Option[string]
     shell*: Option[string]
     log_level*: Option[LogLevel]
     server*: Option[ServerConfig]
@@ -558,12 +561,16 @@ type
     switchable_org_count*: int64
 
   EffectHttpApiErrorInternalServerError* = ref object of RootObj
-    _tag*: string
+    tag*: string
 
   ToolListItem* = ref object of RootObj
     id*: string
     description*: string
     parameters*: JsonNode
+
+  ToolList* = seq[ToolListItem]
+
+  ToolIDs* = seq[string]
 
   WorktreeError* = ref object of RootObj
     name*: string
@@ -733,7 +740,7 @@ type
     error*: string
 
   McpServerNotFoundError* = ref object of RootObj
-    _tag*: string
+    tag*: string
     name*: string
     message*: string
 
@@ -748,17 +755,17 @@ type
     sandboxes*: seq[string]
 
   ProjectNotFoundError* = ref object of RootObj
-    _tag*: string
+    tag*: string
     project_i_d*: string
     message*: string
 
   PtyNotFoundError* = ref object of RootObj
-    _tag*: string
+    tag*: string
     pty_i_d*: string
     message*: string
 
   PtyForbiddenError* = ref object of RootObj
-    _tag*: string
+    tag*: string
     message*: string
 
   QuestionRequest* = ref object of RootObj
@@ -769,7 +776,7 @@ type
     tool*: Option[QuestionTool]
 
   QuestionNotFoundError* = ref object of RootObj
-    _tag*: string
+    tag*: string
     request_i_d*: string
     message*: string
 
@@ -783,7 +790,7 @@ type
     tool*: Option[JsonNode]
 
   PermissionNotFoundError* = ref object of RootObj
-    _tag*: string
+    tag*: string
     request_i_d*: string
     message*: string
 
@@ -838,7 +845,7 @@ type
     command*: Option[string]
 
   SessionBusyError* = ref object of RootObj
-    _tag*: string
+    tag*: string
     session_i_d*: string
     message*: string
 
@@ -877,7 +884,7 @@ type
     data*: JsonNode
 
   UnauthorizedError* = ref object of RootObj
-    _tag*: string
+    tag*: string
     message*: string
 
   SessionsResponse* = ref object of RootObj
@@ -885,14 +892,14 @@ type
     cursor*: JsonNode
 
   InvalidCursorError* = ref object of RootObj
-    _tag*: string
+    tag*: string
     message*: string
 
   SessionActive* = ref object of RootObj
     `type`*: string
 
   SessionNotFoundError* = ref object of RootObj
-    _tag*: string
+    tag*: string
     session_i_d*: string
     message*: string
 
@@ -902,23 +909,23 @@ type
     agents*: Option[seq[PromptAgentAttachment]]
 
   ConflictError* = ref object of RootObj
-    _tag*: string
+    tag*: string
     message*: string
     resource*: Option[string]
 
   ServiceUnavailableError* = ref object of RootObj
-    _tag*: string
+    tag*: string
     message*: string
     service*: Option[string]
 
   MessageNotFoundError* = ref object of RootObj
-    _tag*: string
+    tag*: string
     session_i_d*: string
     message_i_d*: string
     message*: string
 
   UnknownError1* = ref object of RootObj
-    _tag*: string
+    tag*: string
     message*: string
     `ref`*: Option[string]
 
@@ -928,18 +935,20 @@ type
     data*: seq[SessionDurableEvent]
     has_more*: bool
 
+  SessionDurableEventStream* = string
+
   SessionMessagesResponse* = ref object of RootObj
     data*: seq[SessionMessage]
     cursor*: JsonNode
 
   ProviderNotFoundError* = ref object of RootObj
-    _tag*: string
+    tag*: string
     provider_i_d*: string
     message*: string
 
   OutputFormat1* = ref object of RootObj
 
-  Session.status* = ref object of RootObj
+  SessionStatus2* = ref object of RootObj
     id*: string
     metadata*: Option[JsonNode]
     `type`*: string
@@ -947,7 +956,7 @@ type
     location*: Option[LocationRef]
     data*: JsonNode
 
-  Question.replied* = ref object of RootObj
+  QuestionReplied2* = ref object of RootObj
     id*: string
     metadata*: Option[JsonNode]
     `type`*: string
@@ -955,7 +964,7 @@ type
     location*: Option[LocationRef]
     data*: JsonNode
 
-  Question.rejected* = ref object of RootObj
+  QuestionRejected2* = ref object of RootObj
     id*: string
     metadata*: Option[JsonNode]
     `type`*: string
@@ -965,8 +974,10 @@ type
 
   V2Event* = ref object of RootObj
 
+  V2EventStream* = string
+
   ForbiddenError* = ref object of RootObj
-    _tag*: string
+    tag*: string
     message*: string
 
   ProjectCopyError* = ref object of RootObj
@@ -974,24 +985,24 @@ type
     data*: JsonNode
 
   EffectHttpApiErrorForbidden* = ref object of RootObj
-    _tag*: string
+    tag*: string
 
-  Event.tui.prompt.append* = ref object of RootObj
+  EventTuiPromptAppend2* = ref object of RootObj
     id*: string
     `type`*: string
     properties*: JsonNode
 
-  Event.tui.command.execute* = ref object of RootObj
+  EventTuiCommandExecute2* = ref object of RootObj
     id*: string
     `type`*: string
     properties*: JsonNode
 
-  Event.tui.toast.show* = ref object of RootObj
+  EventTuiToastShow2* = ref object of RootObj
     id*: string
     `type`*: string
     properties*: JsonNode
 
-  Event.tui.session.select* = ref object of RootObj
+  EventTuiSessionSelect2* = ref object of RootObj
     id*: string
     `type`*: string
     properties*: JsonNode
@@ -1105,6 +1116,8 @@ type
   QuestionV2Tool* = ref object of RootObj
     message_i_d*: string
     call_i_d*: string
+
+  QuestionV2Answer* = seq[string]
 
   ProjectVcs* = enum
     git = "git"
@@ -1323,6 +1336,8 @@ type
     effect*: PolicyEffect
     resource*: string
 
+  ProjectDirectories* = seq[JsonNode]
+
   PtyTicketConnectToken* = ref object of RootObj
     ticket*: string
     expires_in*: int64
@@ -1351,6 +1366,8 @@ type
     action*: string
     resource*: string
     effect*: PermissionV2Effect
+
+  PermissionV2Ruleset* = seq[PermissionV2Rule]
 
   AgentV2Info* = ref object of RootObj
     id*: string

@@ -1,22 +1,21 @@
 # opencode API client for Nim
 #
 # Auto-generated from OpenAPI 3.x specification
-# Clue CLI Assistant https://github.com/openpeeps/clue
+# Nimbase CLI https://github.com/nimbase/nimbase
 #
-# Generated at: 2026-08-07T13:12:58+03:00
 # License: MIT
-import std/[strformat, options, json]
-import ./metaclient
-import ./types
+import std/[strformat, options]
+import ./private/metaclient
+import ./private/types
 
 type
-  ProjectProjectIDRequest = object
+  PatchProjectProjectIDRequest = object
     name: Option[string]
-    icon: Option[ProjectIcon]
-    commands: Option[ProjectCommands]
+    icon: Option[types.ProjectIcon]
+    commands: Option[types.ProjectCommands]
 
 proc getProject*(client: OpencodeClient, directory: string = default(string),
-                 workspace: string = default(string)): Future[GetProjectResponse] {.async.} =
+                 workspace: string = default(string)): Future[seq[types.Project]] {.async.} =
   ## Get a list of projects that have been opened with OpenCode.
 
   var q = initOrderedTable[string, string]()
@@ -26,13 +25,13 @@ proc getProject*(client: OpencodeClient, directory: string = default(string),
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetProjectResponse)
+    result = fromJson(body, seq[types.Project])
   else:
     raise newException(OpencodeClientError, body)
 
 proc getProjectCurrent*(client: OpencodeClient,
                         directory: string = default(string),
-                        workspace: string = default(string)): Future[Project] {.async.} =
+                        workspace: string = default(string)): Future[types.Project] {.async.} =
   ## Retrieve the currently active project that OpenCode is working with.
 
   var q = initOrderedTable[string, string]()
@@ -42,13 +41,13 @@ proc getProjectCurrent*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, Project)
+    result = fromJson(body, types.Project)
   else:
     raise newException(OpencodeClientError, body)
 
 proc postProjectGitInit*(client: OpencodeClient,
                          directory: string = default(string),
-                         workspace: string = default(string)): Future[Project] {.async.} =
+                         workspace: string = default(string)): Future[types.Project] {.async.} =
   ## Create a git repository for the current project and return the refreshed project
   ## info.
 
@@ -59,14 +58,14 @@ proc postProjectGitInit*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, Project)
+    result = fromJson(body, types.Project)
   else:
     raise newException(OpencodeClientError, body)
 
 proc patchProjectProjectID*(client: OpencodeClient, projectID: string,
                             directory: string = default(string),
                             workspace: string = default(string),
-                            body: ProjectProjectIDRequest): Future[Project] {.async.} =
+                            body: PatchProjectProjectIDRequest): Future[types.Project] {.async.} =
   ## Update project properties such as name, icon, and commands.
 
   var q = initOrderedTable[string, string]()
@@ -76,13 +75,13 @@ proc patchProjectProjectID*(client: OpencodeClient, projectID: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, Project)
+    result = fromJson(body, types.Project)
   else:
     raise newException(OpencodeClientError, body)
 
 proc getProjectProjectIDDirectories*(client: OpencodeClient, projectID: string,
                                      directory: string = default(string),
-                                     workspace: string = default(string)): Future[ProjectDirectories] {.async.} =
+                                     workspace: string = default(string)): Future[types.ProjectDirectories] {.async.} =
   ## List known local absolute directories for a project.
 
   var q = initOrderedTable[string, string]()
@@ -92,6 +91,6 @@ proc getProjectProjectIDDirectories*(client: OpencodeClient, projectID: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, ProjectDirectories)
+    result = fromJson(body, types.ProjectDirectories)
   else:
     raise newException(OpencodeClientError, body)

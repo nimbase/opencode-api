@@ -1,22 +1,21 @@
 # opencode API client for Nim
 #
 # Auto-generated from OpenAPI 3.x specification
-# Clue CLI Assistant https://github.com/openpeeps/clue
+# Nimbase CLI https://github.com/nimbase/nimbase
 #
-# Generated at: 2026-08-07T13:12:58+03:00
 # License: MIT
-import std/[strformat, options, json]
-import ./metaclient
-import ./types
+import std/[options]
+import ./private/metaclient
+import ./private/types
 
 type
-  ExperimentalControlPlaneMoveSessionRequest = object
+  PostExperimentalControlPlaneMoveSessionRequest = object
     session_i_d: string
-    destination: MoveSessionDestination
+    destination: types.MoveSessionDestination
     move_changes: Option[bool]
 
 proc postExperimentalControlPlaneMoveSession*(client: OpencodeClient,
-                                              body: ExperimentalControlPlaneMoveSessionRequest): Future[AsyncResponse] {.async.} =
+                                              body: PostExperimentalControlPlaneMoveSessionRequest): Future[AsyncResponse] {.async.} =
   ## Move a session to another project directory, optionally transferring local
   ## changes.
 

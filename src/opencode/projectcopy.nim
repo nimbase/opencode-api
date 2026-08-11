@@ -1,24 +1,23 @@
 # opencode API client for Nim
 #
 # Auto-generated from OpenAPI 3.x specification
-# Clue CLI Assistant https://github.com/openpeeps/clue
+# Nimbase CLI https://github.com/nimbase/nimbase
 #
-# Generated at: 2026-08-07T13:12:58+03:00
 # License: MIT
 import std/[strformat, options, json]
-import ./metaclient
-import ./types
+import ./private/metaclient
+import ./private/types
 
 type
-  ExperimentalProjectProjectIDCopyGenerateNameRequest = object
+  PostExperimentalProjectProjectIDCopyGenerateNameRequest = object
     context: Option[string]
   PostExperimentalProjectProjectIDCopyGenerateNameResponse* = object
     name: string
-  ExperimentalProjectProjectIDCopyRequest = object
+  PostExperimentalProjectProjectIDCopyRequest = object
     strategy: string
     directory: string
     name: Option[string]
-  ExperimentalProjectProjectIDCopyRequest = object
+  DeleteExperimentalProjectProjectIDCopyRequest = object
     directory: string
     force: bool
 
@@ -26,7 +25,7 @@ proc postExperimentalProjectProjectIDCopyGenerateName*(client: OpencodeClient,
                                                        projectID: string,
                                                        directory: string = default(string),
                                                        workspace: string = default(string),
-                                                       body: ExperimentalProjectProjectIDCopyGenerateNameRequest): Future[PostExperimentalProjectProjectIDCopyGenerateNameResponse] {.async.} =
+                                                       body: PostExperimentalProjectProjectIDCopyGenerateNameRequest): Future[PostExperimentalProjectProjectIDCopyGenerateNameResponse] {.async.} =
   ## Generate a short name for a project copy from task context.
 
   var q = initOrderedTable[string, string]()
@@ -43,21 +42,21 @@ proc postExperimentalProjectProjectIDCopyGenerateName*(client: OpencodeClient,
 proc postExperimentalProjectProjectIDCopy*(client: OpencodeClient,
                                            projectID: string,
                                            location: JsonNode = default(JsonNode),
-                                           body: ExperimentalProjectProjectIDCopyRequest): Future[ProjectCopyCopy] {.async.} =
+                                           body: PostExperimentalProjectProjectIDCopyRequest): Future[types.ProjectCopyCopy] {.async.} =
   var q = initOrderedTable[string, string]()
   q["location"] = $location
   let res = await client.httpPOST(fmt"/experimental/project/{projectID}/copy", q)
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, ProjectCopyCopy)
+    result = fromJson(body, types.ProjectCopyCopy)
   else:
     raise newException(OpencodeClientError, body)
 
 proc deleteExperimentalProjectProjectIDCopy*(client: OpencodeClient,
                                              projectID: string,
                                              location: JsonNode = default(JsonNode),
-                                             body: ExperimentalProjectProjectIDCopyRequest): Future[AsyncResponse] {.async.} =
+                                             body: DeleteExperimentalProjectProjectIDCopyRequest): Future[AsyncResponse] {.async.} =
   var q = initOrderedTable[string, string]()
   q["location"] = $location
   let res = await client.httpDELETE(fmt"/experimental/project/{projectID}/copy", q)

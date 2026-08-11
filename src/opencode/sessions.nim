@@ -1,46 +1,45 @@
 # opencode API client for Nim
 #
 # Auto-generated from OpenAPI 3.x specification
-# Clue CLI Assistant https://github.com/openpeeps/clue
+# Nimbase CLI https://github.com/nimbase/nimbase
 #
-# Generated at: 2026-08-07T13:12:58+03:00
 # License: MIT
 import std/[strformat, options, json]
-import ./metaclient
-import ./types
+import ./private/metaclient
+import ./private/types
 
 type
-  ApiSessionRequest = object
+  PostApiSessionRequest = object
     id: Option[string]
     agent: Option[string]
-    model: Option[ModelRef]
-    location: Option[LocationRef]
+    model: Option[types.ModelRef]
+    location: Option[types.LocationRef]
   PostApiSessionResponse* = object
-    data: SessionV2Info
+    data: types.SessionV2Info
   GetApiSessionActiveResponse* = object
     data: JsonNode
   GetApiSessionSessionIDResponse* = object
-    data: SessionV2Info
-  ApiSessionSessionIDAgentRequest = object
+    data: types.SessionV2Info
+  PostApiSessionSessionIDAgentRequest = object
     agent: string
-  ApiSessionSessionIDModelRequest = object
-    model: ModelRef
-  ApiSessionSessionIDPromptRequest = object
+  PostApiSessionSessionIDModelRequest = object
+    model: types.ModelRef
+  PostApiSessionSessionIDPromptRequest = object
     id: Option[string]
-    prompt: PromptInput
+    prompt: types.PromptInput
     delivery: Option[string]
     resume: Option[bool]
   PostApiSessionSessionIDPromptResponse* = object
-    data: SessionInputAdmitted
-  ApiSessionSessionIDRevertStageRequest = object
+    data: types.SessionInputAdmitted
+  PostApiSessionSessionIDRevertStageRequest = object
     message_i_d: string
     files: Option[bool]
   PostApiSessionSessionIDRevertStageResponse* = object
-    data: RevertState
+    data: types.RevertState
   GetApiSessionSessionIDContextResponse* = object
-    data: seq[SessionMessage]
+    data: seq[types.SessionMessage]
   GetApiSessionSessionIDMessageMessageIDResponse* = object
-    data: SessionMessage
+    data: types.SessionMessage
   SessionOrderOption* = enum
     orderAsc = "asc"
     orderDesc = "desc"
@@ -53,7 +52,7 @@ proc getApiSession*(client: OpencodeClient, workspace: string = default(string),
                     directory: string = default(string),
                     project: string = default(string),
                     subpath: string = default(string),
-                    cursor: string = default(string)): Future[SessionsResponse] {.async.} =
+                    cursor: string = default(string)): Future[types.SessionsResponse] {.async.} =
   ## Retrieve sessions in the requested order. Items keep that order across pages;
   ## use cursor.next or cursor.previous to move through the ordered list.
 
@@ -70,11 +69,11 @@ proc getApiSession*(client: OpencodeClient, workspace: string = default(string),
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, SessionsResponse)
+    result = fromJson(body, types.SessionsResponse)
   else:
     raise newException(OpencodeClientError, body)
 
-proc postApiSession*(client: OpencodeClient, body: ApiSessionRequest): Future[PostApiSessionResponse] {.async.} =
+proc postApiSession*(client: OpencodeClient, body: PostApiSessionRequest): Future[PostApiSessionResponse] {.async.} =
   ## Create a session at the requested location.
 
   let res = await client.httpPOST("/api/session", body)
@@ -109,21 +108,21 @@ proc getApiSessionSessionID*(client: OpencodeClient, sessionID: string): Future[
     raise newException(OpencodeClientError, body)
 
 proc postApiSessionSessionIDAgent*(client: OpencodeClient, sessionID: string,
-                                   body: ApiSessionSessionIDAgentRequest): Future[AsyncResponse] {.async.} =
+                                   body: PostApiSessionSessionIDAgentRequest): Future[AsyncResponse] {.async.} =
   ## Switch the agent used by subsequent provider turns.
 
   let res = await client.httpPOST(fmt"/api/session/{sessionID}/agent", body)
   return res
 
 proc postApiSessionSessionIDModel*(client: OpencodeClient, sessionID: string,
-                                   body: ApiSessionSessionIDModelRequest): Future[AsyncResponse] {.async.} =
+                                   body: PostApiSessionSessionIDModelRequest): Future[AsyncResponse] {.async.} =
   ## Switch the model used by subsequent provider turns.
 
   let res = await client.httpPOST(fmt"/api/session/{sessionID}/model", body)
   return res
 
 proc postApiSessionSessionIDPrompt*(client: OpencodeClient, sessionID: string,
-                                    body: ApiSessionSessionIDPromptRequest): Future[PostApiSessionSessionIDPromptResponse] {.async.} =
+                                    body: PostApiSessionSessionIDPromptRequest): Future[PostApiSessionSessionIDPromptResponse] {.async.} =
   ## Durably admit one session input and schedule agent-loop execution unless resume
   ## is false.
 
@@ -149,7 +148,7 @@ proc postApiSessionSessionIDWait*(client: OpencodeClient, sessionID: string): Fu
 
 proc postApiSessionSessionIDRevertStage*(client: OpencodeClient,
                                          sessionID: string,
-                                         body: ApiSessionSessionIDRevertStageRequest): Future[PostApiSessionSessionIDRevertStageResponse] {.async.} =
+                                         body: PostApiSessionSessionIDRevertStageRequest): Future[PostApiSessionSessionIDRevertStageResponse] {.async.} =
   ## Stage or move a reversible session boundary and optionally apply its file
   ## changes.
 
@@ -189,7 +188,7 @@ proc getApiSessionSessionIDContext*(client: OpencodeClient, sessionID: string): 
 
 proc getApiSessionSessionIDHistory*(client: OpencodeClient, sessionID: string,
                                     limit: string = default(string),
-                                    after: string = default(string)): Future[SessionHistory] {.async.} =
+                                    after: string = default(string)): Future[types.SessionHistory] {.async.} =
   ## Read one finite page of public durable Session events after an exclusive
   ## aggregate sequence. Newly committed events may appear on later pages.
 
@@ -200,7 +199,7 @@ proc getApiSessionSessionIDHistory*(client: OpencodeClient, sessionID: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, SessionHistory)
+    result = fromJson(body, types.SessionHistory)
   else:
     raise newException(OpencodeClientError, body)
 

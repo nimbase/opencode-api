@@ -1,13 +1,12 @@
 # opencode API client for Nim
 #
 # Auto-generated from OpenAPI 3.x specification
-# Clue CLI Assistant https://github.com/openpeeps/clue
+# Nimbase CLI https://github.com/nimbase/nimbase
 #
-# Generated at: 2026-08-07T13:12:58+03:00
 # License: MIT
-import std/[strformat, options, json]
-import ./metaclient
-import ./types
+import std/[strformat]
+import ./private/metaclient
+import ./private/types
 
 type
   MessageOrderOption* = enum
@@ -18,7 +17,7 @@ type
 proc getApiSessionSessionIDMessage*(client: OpencodeClient, sessionID: string,
                                     limit: float64 = default(float64),
                                     order: set[MessageOrderOption] = {},
-                                    cursor: string = default(string)): Future[SessionMessagesResponse] {.async.} =
+                                    cursor: string = default(string)): Future[types.SessionMessagesResponse] {.async.} =
   ## Retrieve projected messages for a session. Items keep the requested order across
   ## pages; use cursor.next or cursor.previous to move through the ordered timeline.
 
@@ -30,6 +29,6 @@ proc getApiSessionSessionIDMessage*(client: OpencodeClient, sessionID: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, SessionMessagesResponse)
+    result = fromJson(body, types.SessionMessagesResponse)
   else:
     raise newException(OpencodeClientError, body)

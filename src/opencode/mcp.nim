@@ -1,16 +1,15 @@
 # opencode API client for Nim
 #
 # Auto-generated from OpenAPI 3.x specification
-# Clue CLI Assistant https://github.com/openpeeps/clue
+# Nimbase CLI https://github.com/nimbase/nimbase
 #
-# Generated at: 2026-08-07T13:12:58+03:00
 # License: MIT
-import std/[strformat, options, json]
-import ./metaclient
-import ./types
+import std/[strformat, json]
+import ./private/metaclient
+import ./private/types
 
 type
-  McpRequest = object
+  PostMcpRequest = object
     name: string
     config: JsonNode
   PostMcpNameAuthResponse* = object
@@ -20,11 +19,11 @@ type
   DeleteMcpNameAuthResponse* = object
     ## OAuth credentials removed
     success: bool
-  McpNameAuthCallbackRequest = object
+  PostMcpNameAuthCallbackRequest = object
     code: string
 
 proc getMcp*(client: OpencodeClient, directory: string = default(string),
-             workspace: string = default(string)): Future[GetMcpResponse] {.async.} =
+             workspace: string = default(string)): Future[JsonNode] {.async.} =
   ## Get the status of all Model Context Protocol (MCP) servers.
 
   var q = initOrderedTable[string, string]()
@@ -34,12 +33,12 @@ proc getMcp*(client: OpencodeClient, directory: string = default(string),
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetMcpResponse)
+    result = fromJson(body, JsonNode)
   else:
     raise newException(OpencodeClientError, body)
 
 proc postMcp*(client: OpencodeClient, directory: string = default(string),
-              workspace: string = default(string), body: McpRequest): Future[PostMcpResponse] {.async.} =
+              workspace: string = default(string), body: PostMcpRequest): Future[JsonNode] {.async.} =
   ## Dynamically add a new Model Context Protocol (MCP) server to the system.
 
   var q = initOrderedTable[string, string]()
@@ -49,7 +48,7 @@ proc postMcp*(client: OpencodeClient, directory: string = default(string),
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, PostMcpResponse)
+    result = fromJson(body, JsonNode)
   else:
     raise newException(OpencodeClientError, body)
 
@@ -88,7 +87,7 @@ proc deleteMcpNameAuth*(client: OpencodeClient, name: string,
 proc postMcpNameAuthCallback*(client: OpencodeClient, name: string,
                               directory: string = default(string),
                               workspace: string = default(string),
-                              body: McpNameAuthCallbackRequest): Future[MCPStatus] {.async.} =
+                              body: PostMcpNameAuthCallbackRequest): Future[types.MCPStatus] {.async.} =
   ## Complete OAuth authentication for a Model Context Protocol (MCP) server using
   ## the authorization code.
 
@@ -99,13 +98,13 @@ proc postMcpNameAuthCallback*(client: OpencodeClient, name: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, MCPStatus)
+    result = fromJson(body, types.MCPStatus)
   else:
     raise newException(OpencodeClientError, body)
 
 proc postMcpNameAuthAuthenticate*(client: OpencodeClient, name: string,
                                   directory: string = default(string),
-                                  workspace: string = default(string)): Future[MCPStatus] {.async.} =
+                                  workspace: string = default(string)): Future[types.MCPStatus] {.async.} =
   ## Start OAuth flow and wait for callback (opens browser).
 
   var q = initOrderedTable[string, string]()
@@ -115,13 +114,13 @@ proc postMcpNameAuthAuthenticate*(client: OpencodeClient, name: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, MCPStatus)
+    result = fromJson(body, types.MCPStatus)
   else:
     raise newException(OpencodeClientError, body)
 
 proc postMcpNameConnect*(client: OpencodeClient, name: string,
                          directory: string = default(string),
-                         workspace: string = default(string)): Future[PostMcpNameConnectResponse] {.async.} =
+                         workspace: string = default(string)): Future[bool] {.async.} =
   ## Connect an MCP server.
 
   var q = initOrderedTable[string, string]()
@@ -131,13 +130,13 @@ proc postMcpNameConnect*(client: OpencodeClient, name: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, PostMcpNameConnectResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)
 
 proc postMcpNameDisconnect*(client: OpencodeClient, name: string,
                             directory: string = default(string),
-                            workspace: string = default(string)): Future[PostMcpNameDisconnectResponse] {.async.} =
+                            workspace: string = default(string)): Future[bool] {.async.} =
   ## Disconnect an MCP server.
 
   var q = initOrderedTable[string, string]()
@@ -147,6 +146,6 @@ proc postMcpNameDisconnect*(client: OpencodeClient, name: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, PostMcpNameDisconnectResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)

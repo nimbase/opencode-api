@@ -1,24 +1,23 @@
 # opencode API client for Nim
 #
 # Auto-generated from OpenAPI 3.x specification
-# Clue CLI Assistant https://github.com/openpeeps/clue
+# Nimbase CLI https://github.com/nimbase/nimbase
 #
-# Generated at: 2026-08-07T13:12:58+03:00
 # License: MIT
 import std/[strformat, options, json]
-import ./metaclient
-import ./types
+import ./private/metaclient
+import ./private/types
 
 type
   GetProviderResponse* = object
     ## List of providers
-    all: seq[Provider]
+    all: seq[types.Provider]
     default: JsonNode
     connected: seq[string]
-  ProviderProviderIDOauthAuthorizeRequest = object
+  PostProviderProviderIDOauthAuthorizeRequest = object
     `method`: float64
     inputs: Option[JsonNode]
-  ProviderProviderIDOauthCallbackRequest = object
+  PostProviderProviderIDOauthCallbackRequest = object
     `method`: float64
     code: Option[string]
 
@@ -40,7 +39,7 @@ proc getProvider*(client: OpencodeClient, directory: string = default(string),
 
 proc getProviderAuth*(client: OpencodeClient,
                       directory: string = default(string),
-                      workspace: string = default(string)): Future[GetProviderAuthResponse] {.async.} =
+                      workspace: string = default(string)): Future[JsonNode] {.async.} =
   ## Retrieve available authentication methods for all AI providers.
 
   var q = initOrderedTable[string, string]()
@@ -50,7 +49,7 @@ proc getProviderAuth*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetProviderAuthResponse)
+    result = fromJson(body, JsonNode)
   else:
     raise newException(OpencodeClientError, body)
 
@@ -58,7 +57,7 @@ proc postProviderProviderIDOauthAuthorize*(client: OpencodeClient,
                                            providerID: string,
                                            directory: string = default(string),
                                            workspace: string = default(string),
-                                           body: ProviderProviderIDOauthAuthorizeRequest): Future[ProviderAuthAuthorization] {.async.} =
+                                           body: PostProviderProviderIDOauthAuthorizeRequest): Future[types.ProviderAuthAuthorization] {.async.} =
   ## Start the OAuth authorization flow for a provider.
 
   var q = initOrderedTable[string, string]()
@@ -68,7 +67,7 @@ proc postProviderProviderIDOauthAuthorize*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, ProviderAuthAuthorization)
+    result = fromJson(body, types.ProviderAuthAuthorization)
   else:
     raise newException(OpencodeClientError, body)
 
@@ -76,7 +75,7 @@ proc postProviderProviderIDOauthCallback*(client: OpencodeClient,
                                           providerID: string,
                                           directory: string = default(string),
                                           workspace: string = default(string),
-                                          body: ProviderProviderIDOauthCallbackRequest): Future[PostProviderProviderIDOauthCallbackResponse] {.async.} =
+                                          body: PostProviderProviderIDOauthCallbackRequest): Future[bool] {.async.} =
   ## Handle the OAuth callback from a provider after user authorization.
 
   var q = initOrderedTable[string, string]()
@@ -86,6 +85,6 @@ proc postProviderProviderIDOauthCallback*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, PostProviderProviderIDOauthCallbackResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)

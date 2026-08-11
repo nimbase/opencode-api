@@ -1,25 +1,24 @@
 # opencode API client for Nim
 #
 # Auto-generated from OpenAPI 3.x specification
-# Clue CLI Assistant https://github.com/openpeeps/clue
+# Nimbase CLI https://github.com/nimbase/nimbase
 #
-# Generated at: 2026-08-07T13:12:58+03:00
 # License: MIT
-import std/[strformat, options, json]
-import ./metaclient
-import ./types
+import std/[strformat, json]
+import ./private/metaclient
+import ./private/types
 
 type
   GetExperimentalConsoleOrgsResponse* = object
     ## Switchable Console orgs
     orgs: seq[JsonNode]
-  ExperimentalConsoleSwitchRequest = object
+  PostExperimentalConsoleSwitchRequest = object
     account_i_d: string
     org_i_d: string
 
 proc getExperimentalCapabilities*(client: OpencodeClient,
                                   directory: string = default(string),
-                                  workspace: string = default(string)): Future[ExperimentalCapabilities] {.async.} =
+                                  workspace: string = default(string)): Future[types.ExperimentalCapabilities] {.async.} =
   ## Get experimental features enabled on the OpenCode server.
 
   var q = initOrderedTable[string, string]()
@@ -29,13 +28,13 @@ proc getExperimentalCapabilities*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, ExperimentalCapabilities)
+    result = fromJson(body, types.ExperimentalCapabilities)
   else:
     raise newException(OpencodeClientError, body)
 
 proc getExperimentalConsole*(client: OpencodeClient,
                              directory: string = default(string),
-                             workspace: string = default(string)): Future[ConsoleState] {.async.} =
+                             workspace: string = default(string)): Future[types.ConsoleState] {.async.} =
   ## Get the active Console org name and the set of provider IDs managed by that
   ## Console org.
 
@@ -46,7 +45,7 @@ proc getExperimentalConsole*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, ConsoleState)
+    result = fromJson(body, types.ConsoleState)
   else:
     raise newException(OpencodeClientError, body)
 
@@ -70,7 +69,7 @@ proc getExperimentalConsoleOrgs*(client: OpencodeClient,
 proc postExperimentalConsoleSwitch*(client: OpencodeClient,
                                     directory: string = default(string),
                                     workspace: string = default(string),
-                                    body: ExperimentalConsoleSwitchRequest): Future[PostExperimentalConsoleSwitchResponse] {.async.} =
+                                    body: PostExperimentalConsoleSwitchRequest): Future[bool] {.async.} =
   ## Persist a new active Console account/org selection for the current local
   ## OpenCode state.
 
@@ -81,14 +80,14 @@ proc postExperimentalConsoleSwitch*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, PostExperimentalConsoleSwitchResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)
 
 proc getExperimentalTool*(client: OpencodeClient,
                           directory: string = default(string),
                           workspace: string = default(string), provider: string,
-                          model: string): Future[ToolList] {.async.} =
+                          model: string): Future[types.ToolList] {.async.} =
   ## Get a list of available tools with their JSON schema parameters for a specific
   ## provider and model combination.
 
@@ -101,13 +100,13 @@ proc getExperimentalTool*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, ToolList)
+    result = fromJson(body, types.ToolList)
   else:
     raise newException(OpencodeClientError, body)
 
 proc getExperimentalToolIds*(client: OpencodeClient,
                              directory: string = default(string),
-                             workspace: string = default(string)): Future[ToolIDs] {.async.} =
+                             workspace: string = default(string)): Future[types.ToolIDs] {.async.} =
   ## Get a list of all available tool IDs, including both built-in tools and
   ## dynamically registered tools.
 
@@ -118,13 +117,13 @@ proc getExperimentalToolIds*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, ToolIDs)
+    result = fromJson(body, types.ToolIDs)
   else:
     raise newException(OpencodeClientError, body)
 
 proc getExperimentalWorktree*(client: OpencodeClient,
                               directory: string = default(string),
-                              workspace: string = default(string)): Future[GetExperimentalWorktreeResponse] {.async.} =
+                              workspace: string = default(string)): Future[seq[string]] {.async.} =
   ## List all sandbox worktrees for the current project.
 
   var q = initOrderedTable[string, string]()
@@ -134,14 +133,14 @@ proc getExperimentalWorktree*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetExperimentalWorktreeResponse)
+    result = fromJson(body, seq[string])
   else:
     raise newException(OpencodeClientError, body)
 
 proc postExperimentalWorktree*(client: OpencodeClient,
                                directory: string = default(string),
                                workspace: string = default(string),
-                               body: WorktreeCreateInput): Future[Worktree] {.async.} =
+                               body: types.WorktreeCreateInput): Future[types.Worktree] {.async.} =
   ## Create a new git worktree for the current project and run any configured startup
   ## scripts.
 
@@ -152,14 +151,14 @@ proc postExperimentalWorktree*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, Worktree)
+    result = fromJson(body, types.Worktree)
   else:
     raise newException(OpencodeClientError, body)
 
 proc deleteExperimentalWorktree*(client: OpencodeClient,
                                  directory: string = default(string),
                                  workspace: string = default(string),
-                                 body: WorktreeRemoveInput): Future[DeleteExperimentalWorktreeResponse] {.async.} =
+                                 body: types.WorktreeRemoveInput): Future[bool] {.async.} =
   ## Remove a git worktree and delete its branch.
 
   var q = initOrderedTable[string, string]()
@@ -169,14 +168,14 @@ proc deleteExperimentalWorktree*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, DeleteExperimentalWorktreeResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)
 
 proc postExperimentalWorktreeReset*(client: OpencodeClient,
                                     directory: string = default(string),
                                     workspace: string = default(string),
-                                    body: WorktreeResetInput): Future[PostExperimentalWorktreeResetResponse] {.async.} =
+                                    body: types.WorktreeResetInput): Future[bool] {.async.} =
   ## Reset a worktree branch to the primary default branch.
 
   var q = initOrderedTable[string, string]()
@@ -186,7 +185,7 @@ proc postExperimentalWorktreeReset*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, PostExperimentalWorktreeResetResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)
 
@@ -198,7 +197,7 @@ proc getExperimentalSession*(client: OpencodeClient,
                              cursor: float64 = default(float64),
                              search: string = default(string),
                              limit: float64 = default(float64),
-                             archived: JsonNode = default(JsonNode)): Future[GetExperimentalSessionResponse] {.async.} =
+                             archived: JsonNode = default(JsonNode)): Future[seq[types.GlobalSession]] {.async.} =
   ## Get a list of all OpenCode sessions across projects, sorted by most recently
   ## updated. Archived sessions are excluded by default.
 
@@ -215,14 +214,14 @@ proc getExperimentalSession*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetExperimentalSessionResponse)
+    result = fromJson(body, seq[types.GlobalSession])
   else:
     raise newException(OpencodeClientError, body)
 
 proc postExperimentalSessionSessionIDBackground*(client: OpencodeClient,
                                                  sessionID: string,
                                                  directory: string = default(string),
-                                                 workspace: string = default(string)): Future[PostExperimentalSessionSessionIDBackgroundResponse] {.async.} =
+                                                 workspace: string = default(string)): Future[bool] {.async.} =
   ## Detach any synchronous subagents currently blocking the session and continue
   ## them in the background.
 
@@ -233,13 +232,13 @@ proc postExperimentalSessionSessionIDBackground*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, PostExperimentalSessionSessionIDBackgroundResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)
 
 proc getExperimentalResource*(client: OpencodeClient,
                               directory: string = default(string),
-                              workspace: string = default(string)): Future[GetExperimentalResourceResponse] {.async.} =
+                              workspace: string = default(string)): Future[JsonNode] {.async.} =
   ## Get all available MCP resources from connected servers. Optionally filter by
   ## name.
 
@@ -250,6 +249,6 @@ proc getExperimentalResource*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetExperimentalResourceResponse)
+    result = fromJson(body, JsonNode)
   else:
     raise newException(OpencodeClientError, body)

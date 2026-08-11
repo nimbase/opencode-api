@@ -1,20 +1,19 @@
 # opencode API client for Nim
 #
 # Auto-generated from OpenAPI 3.x specification
-# Clue CLI Assistant https://github.com/openpeeps/clue
+# Nimbase CLI https://github.com/nimbase/nimbase
 #
-# Generated at: 2026-08-07T13:12:58+03:00
 # License: MIT
-import std/[strformat, options, json]
-import ./metaclient
-import ./types
+import std/[strformat, json]
+import ./private/metaclient
+import ./private/types
 
 type
   GetApiQuestionRequestResponse* = object
-    location: LocationInfo
-    data: seq[QuestionV2Request]
+    location: types.LocationInfo
+    data: seq[types.QuestionV2Request]
   GetApiSessionSessionIDQuestionResponse* = object
-    data: seq[QuestionV2Request]
+    data: seq[types.QuestionV2Request]
 
 proc getApiQuestionRequest*(client: OpencodeClient,
                             location: JsonNode = default(JsonNode)): Future[GetApiQuestionRequestResponse] {.async.} =
@@ -44,7 +43,7 @@ proc getApiSessionSessionIDQuestion*(client: OpencodeClient, sessionID: string):
 proc postApiSessionSessionIDQuestionRequestIDReply*(client: OpencodeClient,
                                                     sessionID: string,
                                                     requestID: string,
-                                                    body: QuestionV2Reply): Future[AsyncResponse] {.async.} =
+                                                    body: types.QuestionV2Reply): Future[AsyncResponse] {.async.} =
   ## Answer a pending question request owned by a session.
 
   let res = await client.httpPOST(fmt"/api/session/{sessionID}/question/{requestID}/reply", body)

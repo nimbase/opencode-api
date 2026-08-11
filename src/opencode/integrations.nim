@@ -1,35 +1,34 @@
 # opencode API client for Nim
 #
 # Auto-generated from OpenAPI 3.x specification
-# Clue CLI Assistant https://github.com/openpeeps/clue
+# Nimbase CLI https://github.com/nimbase/nimbase
 #
-# Generated at: 2026-08-07T13:12:58+03:00
 # License: MIT
 import std/[strformat, options, json]
-import ./metaclient
-import ./types
+import ./private/metaclient
+import ./private/types
 
 type
   GetApiIntegrationResponse* = object
-    location: LocationInfo
-    data: seq[IntegrationInfo]
+    location: types.LocationInfo
+    data: seq[types.IntegrationInfo]
   GetApiIntegrationIntegrationIDResponse* = object
-    location: LocationInfo
-    data: IntegrationInfo
-  ApiIntegrationIntegrationIDConnectKeyRequest = object
+    location: types.LocationInfo
+    data: types.IntegrationInfo
+  PostApiIntegrationIntegrationIDConnectKeyRequest = object
     key: string
     label: Option[string]
-  ApiIntegrationIntegrationIDConnectOauthRequest = object
+  PostApiIntegrationIntegrationIDConnectOauthRequest = object
     method_i_d: string
     inputs: JsonNode
     label: Option[string]
   PostApiIntegrationIntegrationIDConnectOauthResponse* = object
-    location: LocationInfo
-    data: IntegrationAttempt
+    location: types.LocationInfo
+    data: types.IntegrationAttempt
   GetApiIntegrationAttemptAttemptIDResponse* = object
-    location: LocationInfo
-    data: IntegrationAttemptStatus
-  ApiIntegrationAttemptAttemptIDCompleteRequest = object
+    location: types.LocationInfo
+    data: types.IntegrationAttemptStatus
+  PostApiIntegrationAttemptAttemptIDCompleteRequest = object
     code: Option[string]
 
 proc getApiIntegration*(client: OpencodeClient,
@@ -64,7 +63,7 @@ proc getApiIntegrationIntegrationID*(client: OpencodeClient,
 proc postApiIntegrationIntegrationIDConnectKey*(client: OpencodeClient,
                                                 integrationID: string,
                                                 location: JsonNode = default(JsonNode),
-                                                body: ApiIntegrationIntegrationIDConnectKeyRequest): Future[AsyncResponse] {.async.} =
+                                                body: PostApiIntegrationIntegrationIDConnectKeyRequest): Future[AsyncResponse] {.async.} =
   ## Run a key authentication method and store the resulting credential.
 
   var q = initOrderedTable[string, string]()
@@ -75,7 +74,7 @@ proc postApiIntegrationIntegrationIDConnectKey*(client: OpencodeClient,
 proc postApiIntegrationIntegrationIDConnectOauth*(client: OpencodeClient,
                                                   integrationID: string,
                                                   location: JsonNode = default(JsonNode),
-                                                  body: ApiIntegrationIntegrationIDConnectOauthRequest): Future[PostApiIntegrationIntegrationIDConnectOauthResponse] {.async.} =
+                                                  body: PostApiIntegrationIntegrationIDConnectOauthRequest): Future[PostApiIntegrationIntegrationIDConnectOauthResponse] {.async.} =
   ## Start an OAuth attempt and return the authorization details.
 
   var q = initOrderedTable[string, string]()
@@ -116,7 +115,7 @@ proc deleteApiIntegrationAttemptAttemptID*(client: OpencodeClient,
 proc postApiIntegrationAttemptAttemptIDComplete*(client: OpencodeClient,
                                                  attemptID: string,
                                                  location: JsonNode = default(JsonNode),
-                                                 body: ApiIntegrationAttemptAttemptIDCompleteRequest): Future[AsyncResponse] {.async.} =
+                                                 body: PostApiIntegrationAttemptAttemptIDCompleteRequest): Future[AsyncResponse] {.async.} =
   ## Complete a code-based OAuth attempt and store the resulting credential.
 
   var q = initOrderedTable[string, string]()

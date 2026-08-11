@@ -1,17 +1,20 @@
 # opencode API client for Nim
 #
 # Auto-generated from OpenAPI 3.x specification
-# using the awesome [Clue CLI Assistant](https://github.com/openpeeps/clue)
+# using the awesome [Nimbase CLI](https://github.com/nimbase/nimbase)
 #
-# Generated at: 2026-08-07T13:12:58+03:00
 # License: MIT
 
 import std/[asyncdispatch, httpclient, tables,
         strutils, sequtils, times, uri]
 
 import pkg/openparser/json
+import ./renames
+
 
 export asyncdispatch, httpclient, json, tables, sequtils, times
+export renames
+
 
 type
   OpencodeClient* = ref object of RootObj
@@ -78,6 +81,12 @@ proc httpPut*(client: OpencodeClient,
   endpoint: string, query: QueryTable): Future[AsyncResponse] {.async.} =
   let url = client.baseUri & endpoint & $query
   result = await client.httpClient.request(url, httpMethod = HttpPut)
+
+proc httpDelete*[T](client: OpencodeClient,
+  endpoint: string, body: T): Future[AsyncResponse] {.async.} =
+  let url = client.baseUri & endpoint
+  result = await client.httpClient.request(url, httpMethod = HttpDelete,
+    body = toJson(body))
 
 proc httpDelete*(client: OpencodeClient,
   endpoint: string): Future[AsyncResponse] {.async.} =

@@ -1,20 +1,19 @@
 # opencode API client for Nim
 #
 # Auto-generated from OpenAPI 3.x specification
-# Clue CLI Assistant https://github.com/openpeeps/clue
+# Nimbase CLI https://github.com/nimbase/nimbase
 #
-# Generated at: 2026-08-07T13:12:58+03:00
 # License: MIT
-import std/[strformat, options, json]
-import ./metaclient
-import ./types
+import std/[strformat]
+import ./private/metaclient
+import ./private/types
 
 type
-  QuestionRequestIDReplyRequest = object
-    answers: seq[QuestionAnswer]
+  PostQuestionRequestIDReplyRequest = object
+    answers: seq[types.QuestionAnswer]
 
 proc getQuestion*(client: OpencodeClient, directory: string = default(string),
-                  workspace: string = default(string)): Future[GetQuestionResponse] {.async.} =
+                  workspace: string = default(string)): Future[seq[types.QuestionRequest]] {.async.} =
   ## Get all pending question requests across all sessions.
 
   var q = initOrderedTable[string, string]()
@@ -24,14 +23,14 @@ proc getQuestion*(client: OpencodeClient, directory: string = default(string),
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetQuestionResponse)
+    result = fromJson(body, seq[types.QuestionRequest])
   else:
     raise newException(OpencodeClientError, body)
 
 proc postQuestionRequestIDReply*(client: OpencodeClient, requestID: string,
                                  directory: string = default(string),
                                  workspace: string = default(string),
-                                 body: QuestionRequestIDReplyRequest): Future[PostQuestionRequestIDReplyResponse] {.async.} =
+                                 body: PostQuestionRequestIDReplyRequest): Future[bool] {.async.} =
   ## Provide answers to a question request from the AI assistant.
 
   var q = initOrderedTable[string, string]()
@@ -41,13 +40,13 @@ proc postQuestionRequestIDReply*(client: OpencodeClient, requestID: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, PostQuestionRequestIDReplyResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)
 
 proc postQuestionRequestIDReject*(client: OpencodeClient, requestID: string,
                                   directory: string = default(string),
-                                  workspace: string = default(string)): Future[PostQuestionRequestIDRejectResponse] {.async.} =
+                                  workspace: string = default(string)): Future[bool] {.async.} =
   ## Reject a question request from the AI assistant.
 
   var q = initOrderedTable[string, string]()
@@ -57,6 +56,6 @@ proc postQuestionRequestIDReject*(client: OpencodeClient, requestID: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, PostQuestionRequestIDRejectResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)

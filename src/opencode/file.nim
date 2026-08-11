@@ -1,13 +1,12 @@
 # opencode API client for Nim
 #
 # Auto-generated from OpenAPI 3.x specification
-# Clue CLI Assistant https://github.com/openpeeps/clue
+# Nimbase CLI https://github.com/nimbase/nimbase
 #
-# Generated at: 2026-08-07T13:12:58+03:00
 # License: MIT
-import std/[strformat, options, json]
-import ./metaclient
-import ./types
+import std/[json]
+import ./private/metaclient
+import ./private/types
 
 type
   FileDirsOption* = enum
@@ -20,7 +19,7 @@ type
 
 
 proc getFind*(client: OpencodeClient, directory: string = default(string),
-              workspace: string = default(string), pattern: string): Future[GetFindResponse] {.async.} =
+              workspace: string = default(string), pattern: string): Future[seq[JsonNode]] {.async.} =
   ## Search for text patterns across files in the project using ripgrep.
 
   var q = initOrderedTable[string, string]()
@@ -31,7 +30,7 @@ proc getFind*(client: OpencodeClient, directory: string = default(string),
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetFindResponse)
+    result = fromJson(body, seq[JsonNode])
   else:
     raise newException(OpencodeClientError, body)
 
@@ -39,7 +38,7 @@ proc getFindFile*(client: OpencodeClient, directory: string = default(string),
                   workspace: string = default(string), query: string,
                   dirs: set[FileDirsOption] = {},
                   `type`: set[FileTypeOption] = {},
-                  limit: int64 = default(int64)): Future[GetFindFileResponse] {.async.} =
+                  limit: int64 = default(int64)): Future[seq[string]] {.async.} =
   ## Search for files or directories by name or pattern in the project directory.
 
   var q = initOrderedTable[string, string]()
@@ -53,12 +52,12 @@ proc getFindFile*(client: OpencodeClient, directory: string = default(string),
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetFindFileResponse)
+    result = fromJson(body, seq[string])
   else:
     raise newException(OpencodeClientError, body)
 
 proc getFindSymbol*(client: OpencodeClient, directory: string = default(string),
-                    workspace: string = default(string), query: string): Future[GetFindSymbolResponse] {.async.} =
+                    workspace: string = default(string), query: string): Future[seq[types.Symbol]] {.async.} =
   ## Search for workspace symbols like functions, classes, and variables using LSP.
 
   var q = initOrderedTable[string, string]()
@@ -69,12 +68,12 @@ proc getFindSymbol*(client: OpencodeClient, directory: string = default(string),
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetFindSymbolResponse)
+    result = fromJson(body, seq[types.Symbol])
   else:
     raise newException(OpencodeClientError, body)
 
 proc getFile*(client: OpencodeClient, directory: string = default(string),
-              workspace: string = default(string), path: string): Future[GetFileResponse] {.async.} =
+              workspace: string = default(string), path: string): Future[seq[types.FileNode]] {.async.} =
   ## List files and directories in a specified path.
 
   var q = initOrderedTable[string, string]()
@@ -85,12 +84,12 @@ proc getFile*(client: OpencodeClient, directory: string = default(string),
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetFileResponse)
+    result = fromJson(body, seq[types.FileNode])
   else:
     raise newException(OpencodeClientError, body)
 
 proc getFileContent*(client: OpencodeClient, directory: string = default(string),
-                     workspace: string = default(string), path: string): Future[FileContent] {.async.} =
+                     workspace: string = default(string), path: string): Future[types.FileContent] {.async.} =
   ## Read the content of a specified file.
 
   var q = initOrderedTable[string, string]()
@@ -101,12 +100,12 @@ proc getFileContent*(client: OpencodeClient, directory: string = default(string)
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, FileContent)
+    result = fromJson(body, types.FileContent)
   else:
     raise newException(OpencodeClientError, body)
 
 proc getFileStatus*(client: OpencodeClient, directory: string = default(string),
-                    workspace: string = default(string)): Future[GetFileStatusResponse] {.async.} =
+                    workspace: string = default(string)): Future[seq[types.File]] {.async.} =
   ## Get the git status of all files in the project.
 
   var q = initOrderedTable[string, string]()
@@ -116,6 +115,6 @@ proc getFileStatus*(client: OpencodeClient, directory: string = default(string),
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetFileStatusResponse)
+    result = fromJson(body, seq[types.File])
   else:
     raise newException(OpencodeClientError, body)

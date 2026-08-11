@@ -1,66 +1,65 @@
 # opencode API client for Nim
 #
 # Auto-generated from OpenAPI 3.x specification
-# Clue CLI Assistant https://github.com/openpeeps/clue
+# Nimbase CLI https://github.com/nimbase/nimbase
 #
-# Generated at: 2026-08-07T13:12:58+03:00
 # License: MIT
 import std/[strformat, options, json]
-import ./metaclient
-import ./types
+import ./private/metaclient
+import ./private/types
 
 type
-  SessionRequest = object
+  PostSessionRequest = object
     parent_i_d: Option[string]
     title: Option[string]
     agent: Option[string]
     model: Option[JsonNode]
     metadata: Option[JsonNode]
-    permission: Option[PermissionRuleset]
+    permission: Option[types.PermissionRuleset]
     workspace_i_d: Option[string]
-  SessionSessionIDRequest = object
+  PatchSessionSessionIDRequest = object
     title: Option[string]
     metadata: Option[JsonNode]
-    permission: Option[PermissionRuleset]
+    permission: Option[types.PermissionRuleset]
     time: Option[JsonNode]
-  SessionSessionIDMessageRequest = object
+  PostSessionSessionIDMessageRequest = object
     message_i_d: Option[string]
     model: Option[JsonNode]
     agent: Option[string]
     no_reply: Option[bool]
     tools: Option[JsonNode]
-    format: Option[OutputFormat]
+    format: Option[types.OutputFormat]
     system: Option[string]
     variant: Option[string]
     parts: seq[JsonNode]
   PostSessionSessionIDMessageResponse* = object
-    info: AssistantMessage
-    parts: seq[Part]
+    info: types.AssistantMessage
+    parts: seq[types.Part]
   GetSessionSessionIDMessageMessageIDResponse* = object
     ## Message
-    info: Message
-    parts: seq[Part]
-  SessionSessionIDForkRequest = object
+    info: types.Message
+    parts: seq[types.Part]
+  PostSessionSessionIDForkRequest = object
     message_i_d: Option[string]
-  SessionSessionIDInitRequest = object
+  PostSessionSessionIDInitRequest = object
     model_i_d: string
     provider_i_d: string
     message_i_d: string
-  SessionSessionIDSummarizeRequest = object
+  PostSessionSessionIDSummarizeRequest = object
     provider_i_d: string
     model_i_d: string
     auto: Option[bool]
-  SessionSessionIDPromptAsyncRequest = object
+  PostSessionSessionIDPromptAsyncRequest = object
     message_i_d: Option[string]
     model: Option[JsonNode]
     agent: Option[string]
     no_reply: Option[bool]
     tools: Option[JsonNode]
-    format: Option[OutputFormat]
+    format: Option[types.OutputFormat]
     system: Option[string]
     variant: Option[string]
     parts: seq[JsonNode]
-  SessionSessionIDCommandRequest = object
+  PostSessionSessionIDCommandRequest = object
     message_i_d: Option[string]
     agent: Option[string]
     model: Option[string]
@@ -69,21 +68,21 @@ type
     variant: Option[string]
     parts: Option[seq[JsonNode]]
   PostSessionSessionIDCommandResponse* = object
-    info: AssistantMessage
-    parts: seq[Part]
-  SessionSessionIDShellRequest = object
+    info: types.AssistantMessage
+    parts: seq[types.Part]
+  PostSessionSessionIDShellRequest = object
     message_i_d: Option[string]
     agent: string
     model: Option[JsonNode]
     command: string
   PostSessionSessionIDShellResponse* = object
     ## Created message
-    info: Message
-    parts: seq[Part]
-  SessionSessionIDRevertRequest = object
+    info: types.Message
+    parts: seq[types.Part]
+  PostSessionSessionIDRevertRequest = object
     message_i_d: string
     part_i_d: Option[string]
-  SessionSessionIDPermissionsPermissionIDRequest = object
+  PostSessionSessionIDPermissionsPermissionIDRequest = object
     response: string
   SessionScopeOption* = enum
     scopeProject = "project"
@@ -96,7 +95,7 @@ proc getSession*(client: OpencodeClient, directory: string = default(string),
                  roots: JsonNode = default(JsonNode),
                  start: float64 = default(float64),
                  search: string = default(string),
-                 limit: float64 = default(float64)): Future[GetSessionResponse] {.async.} =
+                 limit: float64 = default(float64)): Future[seq[types.Session]] {.async.} =
   ## Get a list of all OpenCode sessions, sorted by most recently updated.
 
   var q = initOrderedTable[string, string]()
@@ -112,12 +111,12 @@ proc getSession*(client: OpencodeClient, directory: string = default(string),
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetSessionResponse)
+    result = fromJson(body, seq[types.Session])
   else:
     raise newException(OpencodeClientError, body)
 
 proc postSession*(client: OpencodeClient, directory: string = default(string),
-                  workspace: string = default(string), body: SessionRequest): Future[Session] {.async.} =
+                  workspace: string = default(string), body: PostSessionRequest): Future[types.Session] {.async.} =
   ## Create a new OpenCode session for interacting with AI assistants and managing
   ## conversations.
 
@@ -128,13 +127,13 @@ proc postSession*(client: OpencodeClient, directory: string = default(string),
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, Session)
+    result = fromJson(body, types.Session)
   else:
     raise newException(OpencodeClientError, body)
 
 proc getSessionStatus*(client: OpencodeClient,
                        directory: string = default(string),
-                       workspace: string = default(string)): Future[GetSessionStatusResponse] {.async.} =
+                       workspace: string = default(string)): Future[JsonNode] {.async.} =
   ## Retrieve the current status of all sessions, including active, idle, and
   ## completed states.
 
@@ -145,13 +144,13 @@ proc getSessionStatus*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetSessionStatusResponse)
+    result = fromJson(body, JsonNode)
   else:
     raise newException(OpencodeClientError, body)
 
 proc getSessionSessionID*(client: OpencodeClient, sessionID: string,
                           directory: string = default(string),
-                          workspace: string = default(string)): Future[Session] {.async.} =
+                          workspace: string = default(string)): Future[types.Session] {.async.} =
   ## Retrieve detailed information about a specific OpenCode session.
 
   var q = initOrderedTable[string, string]()
@@ -161,13 +160,13 @@ proc getSessionSessionID*(client: OpencodeClient, sessionID: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, Session)
+    result = fromJson(body, types.Session)
   else:
     raise newException(OpencodeClientError, body)
 
 proc deleteSessionSessionID*(client: OpencodeClient, sessionID: string,
                              directory: string = default(string),
-                             workspace: string = default(string)): Future[DeleteSessionSessionIDResponse] {.async.} =
+                             workspace: string = default(string)): Future[bool] {.async.} =
   ## Delete a session and permanently remove all associated data, including messages
   ## and history.
 
@@ -178,14 +177,14 @@ proc deleteSessionSessionID*(client: OpencodeClient, sessionID: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, DeleteSessionSessionIDResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)
 
 proc patchSessionSessionID*(client: OpencodeClient, sessionID: string,
                             directory: string = default(string),
                             workspace: string = default(string),
-                            body: SessionSessionIDRequest): Future[Session] {.async.} =
+                            body: PatchSessionSessionIDRequest): Future[types.Session] {.async.} =
   ## Update properties of an existing session, such as title or other metadata.
 
   var q = initOrderedTable[string, string]()
@@ -195,13 +194,13 @@ proc patchSessionSessionID*(client: OpencodeClient, sessionID: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, Session)
+    result = fromJson(body, types.Session)
   else:
     raise newException(OpencodeClientError, body)
 
 proc getSessionSessionIDChildren*(client: OpencodeClient, sessionID: string,
                                   directory: string = default(string),
-                                  workspace: string = default(string)): Future[GetSessionSessionIDChildrenResponse] {.async.} =
+                                  workspace: string = default(string)): Future[seq[types.Session]] {.async.} =
   ## Retrieve all child sessions that were forked from the specified parent session.
 
   var q = initOrderedTable[string, string]()
@@ -211,13 +210,13 @@ proc getSessionSessionIDChildren*(client: OpencodeClient, sessionID: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetSessionSessionIDChildrenResponse)
+    result = fromJson(body, seq[types.Session])
   else:
     raise newException(OpencodeClientError, body)
 
 proc getSessionSessionIDTodo*(client: OpencodeClient, sessionID: string,
                               directory: string = default(string),
-                              workspace: string = default(string)): Future[GetSessionSessionIDTodoResponse] {.async.} =
+                              workspace: string = default(string)): Future[seq[types.Todo]] {.async.} =
   ## Retrieve the todo list associated with a specific session, showing tasks and
   ## action items.
 
@@ -228,14 +227,14 @@ proc getSessionSessionIDTodo*(client: OpencodeClient, sessionID: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetSessionSessionIDTodoResponse)
+    result = fromJson(body, seq[types.Todo])
   else:
     raise newException(OpencodeClientError, body)
 
 proc getSessionSessionIDDiff*(client: OpencodeClient, sessionID: string,
                               directory: string = default(string),
                               workspace: string = default(string),
-                              messageID: string = default(string)): Future[GetSessionSessionIDDiffResponse] {.async.} =
+                              messageID: string = default(string)): Future[seq[types.SnapshotFileDiff]] {.async.} =
   ## Get the file changes (diff) that resulted from a specific user message in the
   ## session.
 
@@ -247,7 +246,7 @@ proc getSessionSessionIDDiff*(client: OpencodeClient, sessionID: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetSessionSessionIDDiffResponse)
+    result = fromJson(body, seq[types.SnapshotFileDiff])
   else:
     raise newException(OpencodeClientError, body)
 
@@ -255,7 +254,7 @@ proc getSessionSessionIDMessage*(client: OpencodeClient, sessionID: string,
                                  directory: string = default(string),
                                  workspace: string = default(string),
                                  limit: int64 = default(int64),
-                                 before: string = default(string)): Future[GetSessionSessionIDMessageResponse] {.async.} =
+                                 before: string = default(string)): Future[seq[JsonNode]] {.async.} =
   ## Retrieve all messages in a session, including user prompts and AI responses.
 
   var q = initOrderedTable[string, string]()
@@ -267,14 +266,14 @@ proc getSessionSessionIDMessage*(client: OpencodeClient, sessionID: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetSessionSessionIDMessageResponse)
+    result = fromJson(body, seq[JsonNode])
   else:
     raise newException(OpencodeClientError, body)
 
 proc postSessionSessionIDMessage*(client: OpencodeClient, sessionID: string,
                                   directory: string = default(string),
                                   workspace: string = default(string),
-                                  body: SessionSessionIDMessageRequest): Future[PostSessionSessionIDMessageResponse] {.async.} =
+                                  body: PostSessionSessionIDMessageRequest): Future[PostSessionSessionIDMessageResponse] {.async.} =
   ## Create and send a new message to a session, streaming the AI response.
 
   var q = initOrderedTable[string, string]()
@@ -309,7 +308,7 @@ proc deleteSessionSessionIDMessageMessageID*(client: OpencodeClient,
                                              sessionID: string,
                                              messageID: string,
                                              directory: string = default(string),
-                                             workspace: string = default(string)): Future[DeleteSessionSessionIDMessageMessageIDResponse] {.async.} =
+                                             workspace: string = default(string)): Future[bool] {.async.} =
   ## Permanently delete a specific message and all of its parts from a session
   ## without reverting file changes.
 
@@ -320,14 +319,14 @@ proc deleteSessionSessionIDMessageMessageID*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, DeleteSessionSessionIDMessageMessageIDResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)
 
 proc postSessionSessionIDFork*(client: OpencodeClient, sessionID: string,
                                directory: string = default(string),
                                workspace: string = default(string),
-                               body: SessionSessionIDForkRequest): Future[Session] {.async.} =
+                               body: PostSessionSessionIDForkRequest): Future[types.Session] {.async.} =
   ## Create a new session by forking an existing session at a specific message point.
 
   var q = initOrderedTable[string, string]()
@@ -337,13 +336,13 @@ proc postSessionSessionIDFork*(client: OpencodeClient, sessionID: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, Session)
+    result = fromJson(body, types.Session)
   else:
     raise newException(OpencodeClientError, body)
 
 proc postSessionSessionIDAbort*(client: OpencodeClient, sessionID: string,
                                 directory: string = default(string),
-                                workspace: string = default(string)): Future[PostSessionSessionIDAbortResponse] {.async.} =
+                                workspace: string = default(string)): Future[bool] {.async.} =
   ## Abort an active session and stop any ongoing AI processing or command execution.
 
   var q = initOrderedTable[string, string]()
@@ -353,14 +352,14 @@ proc postSessionSessionIDAbort*(client: OpencodeClient, sessionID: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, PostSessionSessionIDAbortResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)
 
 proc postSessionSessionIDInit*(client: OpencodeClient, sessionID: string,
                                directory: string = default(string),
                                workspace: string = default(string),
-                               body: SessionSessionIDInitRequest): Future[PostSessionSessionIDInitResponse] {.async.} =
+                               body: PostSessionSessionIDInitRequest): Future[bool] {.async.} =
   ## Analyze the current application and create an AGENTS.md file with
   ## project-specific agent configurations.
 
@@ -371,13 +370,13 @@ proc postSessionSessionIDInit*(client: OpencodeClient, sessionID: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, PostSessionSessionIDInitResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)
 
 proc postSessionSessionIDShare*(client: OpencodeClient, sessionID: string,
                                 directory: string = default(string),
-                                workspace: string = default(string)): Future[Session] {.async.} =
+                                workspace: string = default(string)): Future[types.Session] {.async.} =
   ## Create a shareable link for a session, allowing others to view the conversation.
 
   var q = initOrderedTable[string, string]()
@@ -387,13 +386,13 @@ proc postSessionSessionIDShare*(client: OpencodeClient, sessionID: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, Session)
+    result = fromJson(body, types.Session)
   else:
     raise newException(OpencodeClientError, body)
 
 proc deleteSessionSessionIDShare*(client: OpencodeClient, sessionID: string,
                                   directory: string = default(string),
-                                  workspace: string = default(string)): Future[Session] {.async.} =
+                                  workspace: string = default(string)): Future[types.Session] {.async.} =
   ## Remove the shareable link for a session, making it private again.
 
   var q = initOrderedTable[string, string]()
@@ -403,14 +402,14 @@ proc deleteSessionSessionIDShare*(client: OpencodeClient, sessionID: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, Session)
+    result = fromJson(body, types.Session)
   else:
     raise newException(OpencodeClientError, body)
 
 proc postSessionSessionIDSummarize*(client: OpencodeClient, sessionID: string,
                                     directory: string = default(string),
                                     workspace: string = default(string),
-                                    body: SessionSessionIDSummarizeRequest): Future[PostSessionSessionIDSummarizeResponse] {.async.} =
+                                    body: PostSessionSessionIDSummarizeRequest): Future[bool] {.async.} =
   ## Generate a concise summary of the session using AI compaction to preserve key
   ## information.
 
@@ -421,14 +420,14 @@ proc postSessionSessionIDSummarize*(client: OpencodeClient, sessionID: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, PostSessionSessionIDSummarizeResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)
 
 proc postSessionSessionIDPromptAsync*(client: OpencodeClient, sessionID: string,
                                       directory: string = default(string),
                                       workspace: string = default(string),
-                                      body: SessionSessionIDPromptAsyncRequest): Future[AsyncResponse] {.async.} =
+                                      body: PostSessionSessionIDPromptAsyncRequest): Future[AsyncResponse] {.async.} =
   ## Create and send a new message to a session asynchronously, starting the session
   ## if needed and returning immediately.
 
@@ -441,7 +440,7 @@ proc postSessionSessionIDPromptAsync*(client: OpencodeClient, sessionID: string,
 proc postSessionSessionIDCommand*(client: OpencodeClient, sessionID: string,
                                   directory: string = default(string),
                                   workspace: string = default(string),
-                                  body: SessionSessionIDCommandRequest): Future[PostSessionSessionIDCommandResponse] {.async.} =
+                                  body: PostSessionSessionIDCommandRequest): Future[PostSessionSessionIDCommandResponse] {.async.} =
   ## Send a new command to a session for execution by the AI assistant.
 
   var q = initOrderedTable[string, string]()
@@ -458,7 +457,7 @@ proc postSessionSessionIDCommand*(client: OpencodeClient, sessionID: string,
 proc postSessionSessionIDShell*(client: OpencodeClient, sessionID: string,
                                 directory: string = default(string),
                                 workspace: string = default(string),
-                                body: SessionSessionIDShellRequest): Future[PostSessionSessionIDShellResponse] {.async.} =
+                                body: PostSessionSessionIDShellRequest): Future[PostSessionSessionIDShellResponse] {.async.} =
   ## Execute a shell command within the session context and return the AI's response.
 
   var q = initOrderedTable[string, string]()
@@ -475,7 +474,7 @@ proc postSessionSessionIDShell*(client: OpencodeClient, sessionID: string,
 proc postSessionSessionIDRevert*(client: OpencodeClient, sessionID: string,
                                  directory: string = default(string),
                                  workspace: string = default(string),
-                                 body: SessionSessionIDRevertRequest): Future[Session] {.async.} =
+                                 body: PostSessionSessionIDRevertRequest): Future[types.Session] {.async.} =
   ## Revert a specific message in a session, undoing its effects and restoring the
   ## previous state.
 
@@ -486,13 +485,13 @@ proc postSessionSessionIDRevert*(client: OpencodeClient, sessionID: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, Session)
+    result = fromJson(body, types.Session)
   else:
     raise newException(OpencodeClientError, body)
 
 proc postSessionSessionIDUnrevert*(client: OpencodeClient, sessionID: string,
                                    directory: string = default(string),
-                                   workspace: string = default(string)): Future[Session] {.async.} =
+                                   workspace: string = default(string)): Future[types.Session] {.async.} =
   ## Restore all previously reverted messages in a session.
 
   var q = initOrderedTable[string, string]()
@@ -502,7 +501,7 @@ proc postSessionSessionIDUnrevert*(client: OpencodeClient, sessionID: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, Session)
+    result = fromJson(body, types.Session)
   else:
     raise newException(OpencodeClientError, body)
 
@@ -511,7 +510,7 @@ proc postSessionSessionIDPermissionsPermissionID*(client: OpencodeClient,
                                                   permissionID: string,
                                                   directory: string = default(string),
                                                   workspace: string = default(string),
-                                                  body: SessionSessionIDPermissionsPermissionIDRequest): Future[PostSessionSessionIDPermissionsPermissionIDResponse] {.async.} =
+                                                  body: PostSessionSessionIDPermissionsPermissionIDRequest): Future[bool] {.async.} =
   ## Approve or deny a permission request from the AI assistant.
 
   var q = initOrderedTable[string, string]()
@@ -521,7 +520,7 @@ proc postSessionSessionIDPermissionsPermissionID*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, PostSessionSessionIDPermissionsPermissionIDResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)
 
@@ -530,7 +529,7 @@ proc deleteSessionSessionIDMessageMessageIDPartPartID*(client: OpencodeClient,
                                                        messageID: string,
                                                        partID: string,
                                                        directory: string = default(string),
-                                                       workspace: string = default(string)): Future[DeleteSessionSessionIDMessageMessageIDPartPartIDResponse] {.async.} =
+                                                       workspace: string = default(string)): Future[bool] {.async.} =
   ## Delete a part from a message.
 
   var q = initOrderedTable[string, string]()
@@ -540,7 +539,7 @@ proc deleteSessionSessionIDMessageMessageIDPartPartID*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, DeleteSessionSessionIDMessageMessageIDPartPartIDResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)
 
@@ -550,7 +549,7 @@ proc patchSessionSessionIDMessageMessageIDPartPartID*(client: OpencodeClient,
                                                       partID: string,
                                                       directory: string = default(string),
                                                       workspace: string = default(string),
-                                                      body: Part): Future[Part] {.async.} =
+                                                      body: types.Part): Future[types.Part] {.async.} =
   ## Update a part in a message.
 
   var q = initOrderedTable[string, string]()
@@ -560,6 +559,6 @@ proc patchSessionSessionIDMessageMessageIDPartPartID*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, Part)
+    result = fromJson(body, types.Part)
   else:
     raise newException(OpencodeClientError, body)

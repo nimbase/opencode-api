@@ -1,21 +1,20 @@
 # opencode API client for Nim
 #
 # Auto-generated from OpenAPI 3.x specification
-# Clue CLI Assistant https://github.com/openpeeps/clue
+# Nimbase CLI https://github.com/nimbase/nimbase
 #
-# Generated at: 2026-08-07T13:12:58+03:00
 # License: MIT
-import std/[strformat, options, json]
-import ./metaclient
-import ./types
+import std/[strformat, json]
+import ./private/metaclient
+import ./private/types
 
 type
   GetApiProviderResponse* = object
-    location: LocationInfo
-    data: seq[ProviderV2Info]
+    location: types.LocationInfo
+    data: seq[types.ProviderV2Info]
   GetApiProviderProviderIDResponse* = object
-    location: LocationInfo
-    data: ProviderV2Info
+    location: types.LocationInfo
+    data: types.ProviderV2Info
 
 proc getApiProvider*(client: OpencodeClient,
                      location: JsonNode = default(JsonNode)): Future[GetApiProviderResponse] {.async.} =

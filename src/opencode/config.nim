@@ -1,22 +1,21 @@
 # opencode API client for Nim
 #
 # Auto-generated from OpenAPI 3.x specification
-# Clue CLI Assistant https://github.com/openpeeps/clue
+# Nimbase CLI https://github.com/nimbase/nimbase
 #
-# Generated at: 2026-08-07T13:12:58+03:00
 # License: MIT
-import std/[strformat, options, json]
-import ./metaclient
-import ./types
+import std/[json]
+import ./private/metaclient
+import ./private/types
 
 type
   GetConfigProvidersResponse* = object
     ## List of providers
-    providers: seq[Provider]
+    providers: seq[types.Provider]
     default: JsonNode
 
 proc getConfig*(client: OpencodeClient, directory: string = default(string),
-                workspace: string = default(string)): Future[Config] {.async.} =
+                workspace: string = default(string)): Future[types.Config] {.async.} =
   ## Retrieve the current OpenCode configuration settings and preferences.
 
   var q = initOrderedTable[string, string]()
@@ -26,12 +25,12 @@ proc getConfig*(client: OpencodeClient, directory: string = default(string),
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, Config)
+    result = fromJson(body, types.Config)
   else:
     raise newException(OpencodeClientError, body)
 
 proc patchConfig*(client: OpencodeClient, directory: string = default(string),
-                  workspace: string = default(string), body: Config): Future[Config] {.async.} =
+                  workspace: string = default(string), body: types.Config): Future[types.Config] {.async.} =
   ## Update OpenCode configuration settings and preferences.
 
   var q = initOrderedTable[string, string]()
@@ -41,7 +40,7 @@ proc patchConfig*(client: OpencodeClient, directory: string = default(string),
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, Config)
+    result = fromJson(body, types.Config)
   else:
     raise newException(OpencodeClientError, body)
 

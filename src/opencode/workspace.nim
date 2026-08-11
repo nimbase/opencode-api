@@ -1,28 +1,27 @@
 # opencode API client for Nim
 #
 # Auto-generated from OpenAPI 3.x specification
-# Clue CLI Assistant https://github.com/openpeeps/clue
+# Nimbase CLI https://github.com/nimbase/nimbase
 #
-# Generated at: 2026-08-07T13:12:58+03:00
 # License: MIT
 import std/[strformat, options, json]
-import ./metaclient
-import ./types
+import ./private/metaclient
+import ./private/types
 
 type
-  ExperimentalWorkspaceRequest = object
+  PostExperimentalWorkspaceRequest = object
     id: Option[string]
     `type`: string
     branch: Option[JsonNode]
     extra: Option[JsonNode]
-  ExperimentalWorkspaceWarpRequest = object
+  PostExperimentalWorkspaceWarpRequest = object
     id: JsonNode
     session_i_d: string
     copy_changes: Option[bool]
 
 proc getExperimentalWorkspaceAdapter*(client: OpencodeClient,
                                       directory: string = default(string),
-                                      workspace: string = default(string)): Future[GetExperimentalWorkspaceAdapterResponse] {.async.} =
+                                      workspace: string = default(string)): Future[seq[JsonNode]] {.async.} =
   ## List all available workspace adapters for the current project.
 
   var q = initOrderedTable[string, string]()
@@ -32,13 +31,13 @@ proc getExperimentalWorkspaceAdapter*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetExperimentalWorkspaceAdapterResponse)
+    result = fromJson(body, seq[JsonNode])
   else:
     raise newException(OpencodeClientError, body)
 
 proc getExperimentalWorkspace*(client: OpencodeClient,
                                directory: string = default(string),
-                               workspace: string = default(string)): Future[GetExperimentalWorkspaceResponse] {.async.} =
+                               workspace: string = default(string)): Future[seq[types.Workspace]] {.async.} =
   ## List all workspaces.
 
   var q = initOrderedTable[string, string]()
@@ -48,14 +47,14 @@ proc getExperimentalWorkspace*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetExperimentalWorkspaceResponse)
+    result = fromJson(body, seq[types.Workspace])
   else:
     raise newException(OpencodeClientError, body)
 
 proc postExperimentalWorkspace*(client: OpencodeClient,
                                 directory: string = default(string),
                                 workspace: string = default(string),
-                                body: ExperimentalWorkspaceRequest): Future[Workspace] {.async.} =
+                                body: PostExperimentalWorkspaceRequest): Future[types.Workspace] {.async.} =
   ## Create a workspace for the current project.
 
   var q = initOrderedTable[string, string]()
@@ -65,7 +64,7 @@ proc postExperimentalWorkspace*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, Workspace)
+    result = fromJson(body, types.Workspace)
   else:
     raise newException(OpencodeClientError, body)
 
@@ -82,7 +81,7 @@ proc postExperimentalWorkspaceSyncList*(client: OpencodeClient,
 
 proc getExperimentalWorkspaceStatus*(client: OpencodeClient,
                                      directory: string = default(string),
-                                     workspace: string = default(string)): Future[GetExperimentalWorkspaceStatusResponse] {.async.} =
+                                     workspace: string = default(string)): Future[seq[types.WorkspaceEventConnectionStatus]] {.async.} =
   ## Get connection status for workspaces in the current project.
 
   var q = initOrderedTable[string, string]()
@@ -92,13 +91,13 @@ proc getExperimentalWorkspaceStatus*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, GetExperimentalWorkspaceStatusResponse)
+    result = fromJson(body, seq[types.WorkspaceEventConnectionStatus])
   else:
     raise newException(OpencodeClientError, body)
 
 proc deleteExperimentalWorkspaceId*(client: OpencodeClient, id: string,
                                     directory: string = default(string),
-                                    workspace: string = default(string)): Future[Workspace] {.async.} =
+                                    workspace: string = default(string)): Future[types.Workspace] {.async.} =
   ## Remove an existing workspace.
 
   var q = initOrderedTable[string, string]()
@@ -108,14 +107,14 @@ proc deleteExperimentalWorkspaceId*(client: OpencodeClient, id: string,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, Workspace)
+    result = fromJson(body, types.Workspace)
   else:
     raise newException(OpencodeClientError, body)
 
 proc postExperimentalWorkspaceWarp*(client: OpencodeClient,
                                     directory: string = default(string),
                                     workspace: string = default(string),
-                                    body: ExperimentalWorkspaceWarpRequest): Future[AsyncResponse] {.async.} =
+                                    body: PostExperimentalWorkspaceWarpRequest): Future[AsyncResponse] {.async.} =
   ## Move a session's sync history into the target workspace, or detach it to the
   ## local project.
 

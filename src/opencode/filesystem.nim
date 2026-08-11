@@ -1,21 +1,20 @@
 # opencode API client for Nim
 #
 # Auto-generated from OpenAPI 3.x specification
-# Clue CLI Assistant https://github.com/openpeeps/clue
+# Nimbase CLI https://github.com/nimbase/nimbase
 #
-# Generated at: 2026-08-07T13:12:58+03:00
 # License: MIT
-import std/[strformat, options, json]
-import ./metaclient
-import ./types
+import std/[json]
+import ./private/metaclient
+import ./private/types
 
 type
   GetApiFsListResponse* = object
-    location: LocationInfo
-    data: seq[FileSystemEntry]
+    location: types.LocationInfo
+    data: seq[types.FileSystemEntry]
   GetApiFsFindResponse* = object
-    location: LocationInfo
-    data: seq[FileSystemEntry]
+    location: types.LocationInfo
+    data: seq[types.FileSystemEntry]
   FilesystemTypeOption* = enum
     typeFile = "file"
     typeDirectory = "directory"

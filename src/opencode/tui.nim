@@ -1,25 +1,23 @@
 # opencode API client for Nim
 #
 # Auto-generated from OpenAPI 3.x specification
-# Clue CLI Assistant https://github.com/openpeeps/clue
+# Nimbase CLI https://github.com/nimbase/nimbase
 #
-# Generated at: 2026-08-07T13:12:58+03:00
 # License: MIT
-import std/[strformat, options, json]
-import ./metaclient
-import ./types
+import std/[options, json]
+import ./private/metaclient
 
 type
-  TuiAppendPromptRequest = object
+  PostTuiAppendPromptRequest = object
     text: string
-  TuiExecuteCommandRequest = object
+  PostTuiExecuteCommandRequest = object
     command: string
-  TuiShowToastRequest = object
+  PostTuiShowToastRequest = object
     title: Option[string]
     message: string
     variant: string
     duration: Option[int64]
-  TuiSelectSessionRequest = object
+  PostTuiSelectSessionRequest = object
     session_i_d: string
   GetTuiControlNextResponse* = object
     ## Next TUI request
@@ -29,7 +27,7 @@ type
 proc postTuiAppendPrompt*(client: OpencodeClient,
                           directory: string = default(string),
                           workspace: string = default(string),
-                          body: TuiAppendPromptRequest): Future[PostTuiAppendPromptResponse] {.async.} =
+                          body: PostTuiAppendPromptRequest): Future[bool] {.async.} =
   ## Append prompt to the TUI.
 
   var q = initOrderedTable[string, string]()
@@ -39,13 +37,13 @@ proc postTuiAppendPrompt*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, PostTuiAppendPromptResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)
 
 proc postTuiOpenHelp*(client: OpencodeClient,
                       directory: string = default(string),
-                      workspace: string = default(string)): Future[PostTuiOpenHelpResponse] {.async.} =
+                      workspace: string = default(string)): Future[bool] {.async.} =
   ## Open the help dialog in the TUI to display user assistance information.
 
   var q = initOrderedTable[string, string]()
@@ -55,13 +53,13 @@ proc postTuiOpenHelp*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, PostTuiOpenHelpResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)
 
 proc postTuiOpenSessions*(client: OpencodeClient,
                           directory: string = default(string),
-                          workspace: string = default(string)): Future[PostTuiOpenSessionsResponse] {.async.} =
+                          workspace: string = default(string)): Future[bool] {.async.} =
   ## Open the session dialog.
 
   var q = initOrderedTable[string, string]()
@@ -71,13 +69,13 @@ proc postTuiOpenSessions*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, PostTuiOpenSessionsResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)
 
 proc postTuiOpenThemes*(client: OpencodeClient,
                         directory: string = default(string),
-                        workspace: string = default(string)): Future[PostTuiOpenThemesResponse] {.async.} =
+                        workspace: string = default(string)): Future[bool] {.async.} =
   ## Open the theme dialog.
 
   var q = initOrderedTable[string, string]()
@@ -87,13 +85,13 @@ proc postTuiOpenThemes*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, PostTuiOpenThemesResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)
 
 proc postTuiOpenModels*(client: OpencodeClient,
                         directory: string = default(string),
-                        workspace: string = default(string)): Future[PostTuiOpenModelsResponse] {.async.} =
+                        workspace: string = default(string)): Future[bool] {.async.} =
   ## Open the model dialog.
 
   var q = initOrderedTable[string, string]()
@@ -103,13 +101,13 @@ proc postTuiOpenModels*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, PostTuiOpenModelsResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)
 
 proc postTuiSubmitPrompt*(client: OpencodeClient,
                           directory: string = default(string),
-                          workspace: string = default(string)): Future[PostTuiSubmitPromptResponse] {.async.} =
+                          workspace: string = default(string)): Future[bool] {.async.} =
   ## Submit the prompt.
 
   var q = initOrderedTable[string, string]()
@@ -119,13 +117,13 @@ proc postTuiSubmitPrompt*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, PostTuiSubmitPromptResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)
 
 proc postTuiClearPrompt*(client: OpencodeClient,
                          directory: string = default(string),
-                         workspace: string = default(string)): Future[PostTuiClearPromptResponse] {.async.} =
+                         workspace: string = default(string)): Future[bool] {.async.} =
   ## Clear the prompt.
 
   var q = initOrderedTable[string, string]()
@@ -135,14 +133,14 @@ proc postTuiClearPrompt*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, PostTuiClearPromptResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)
 
 proc postTuiExecuteCommand*(client: OpencodeClient,
                             directory: string = default(string),
                             workspace: string = default(string),
-                            body: TuiExecuteCommandRequest): Future[PostTuiExecuteCommandResponse] {.async.} =
+                            body: PostTuiExecuteCommandRequest): Future[bool] {.async.} =
   ## Execute a TUI command.
 
   var q = initOrderedTable[string, string]()
@@ -152,14 +150,14 @@ proc postTuiExecuteCommand*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, PostTuiExecuteCommandResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)
 
 proc postTuiShowToast*(client: OpencodeClient,
                        directory: string = default(string),
                        workspace: string = default(string),
-                       body: TuiShowToastRequest): Future[PostTuiShowToastResponse] {.async.} =
+                       body: PostTuiShowToastRequest): Future[bool] {.async.} =
   ## Show a toast notification in the TUI.
 
   var q = initOrderedTable[string, string]()
@@ -169,12 +167,12 @@ proc postTuiShowToast*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, PostTuiShowToastResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)
 
 proc postTuiPublish*(client: OpencodeClient, directory: string = default(string),
-                     workspace: string = default(string)): Future[PostTuiPublishResponse] {.async.} =
+                     workspace: string = default(string)): Future[bool] {.async.} =
   ## Publish a TUI event.
 
   var q = initOrderedTable[string, string]()
@@ -184,14 +182,14 @@ proc postTuiPublish*(client: OpencodeClient, directory: string = default(string)
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, PostTuiPublishResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)
 
 proc postTuiSelectSession*(client: OpencodeClient,
                            directory: string = default(string),
                            workspace: string = default(string),
-                           body: TuiSelectSessionRequest): Future[PostTuiSelectSessionResponse] {.async.} =
+                           body: PostTuiSelectSessionRequest): Future[bool] {.async.} =
   ## Navigate the TUI to display the specified session.
 
   var q = initOrderedTable[string, string]()
@@ -201,7 +199,7 @@ proc postTuiSelectSession*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, PostTuiSelectSessionResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)
 
@@ -223,7 +221,7 @@ proc getTuiControlNext*(client: OpencodeClient,
 
 proc postTuiControlResponse*(client: OpencodeClient,
                              directory: string = default(string),
-                             workspace: string = default(string)): Future[PostTuiControlResponseResponse] {.async.} =
+                             workspace: string = default(string)): Future[bool] {.async.} =
   ## Submit a response to the TUI request queue to complete a pending request.
 
   var q = initOrderedTable[string, string]()
@@ -233,6 +231,6 @@ proc postTuiControlResponse*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, PostTuiControlResponseResponse)
+    result = fromJson(body, bool)
   else:
     raise newException(OpencodeClientError, body)

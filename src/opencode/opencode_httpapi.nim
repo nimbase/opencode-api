@@ -1,21 +1,20 @@
 # opencode API client for Nim
 #
 # Auto-generated from OpenAPI 3.x specification
-# Clue CLI Assistant https://github.com/openpeeps/clue
+# Nimbase CLI https://github.com/nimbase/nimbase
 #
-# Generated at: 2026-08-07T13:12:58+03:00
 # License: MIT
-import std/[strformat, options, json]
-import ./metaclient
-import ./types
+import std/[strformat, json]
+import ./private/metaclient
+import ./private/types
 
 type
   GetApiHealthResponse* = object
     healthy: bool
   GetApiAgentResponse* = object
-    location: LocationInfo
-    data: seq[AgentV2Info]
-  ApiCredentialCredentialIDRequest = object
+    location: types.LocationInfo
+    data: seq[types.AgentV2Info]
+  PatchApiCredentialCredentialIDRequest = object
     label: string
 
 proc getApiHealth*(client: OpencodeClient): Future[GetApiHealthResponse] {.async.} =
@@ -30,7 +29,7 @@ proc getApiHealth*(client: OpencodeClient): Future[GetApiHealthResponse] {.async
     raise newException(OpencodeClientError, body)
 
 proc getApiLocation*(client: OpencodeClient,
-                     location: JsonNode = default(JsonNode)): Future[LocationInfo] {.async.} =
+                     location: JsonNode = default(JsonNode)): Future[types.LocationInfo] {.async.} =
   ## Resolve the requested location or the server default location.
 
   var q = initOrderedTable[string, string]()
@@ -39,7 +38,7 @@ proc getApiLocation*(client: OpencodeClient,
   let body = await res.body
   case res.code
   of Http200:
-    result = fromJson(body, LocationInfo)
+    result = fromJson(body, types.LocationInfo)
   else:
     raise newException(OpencodeClientError, body)
 
@@ -69,7 +68,7 @@ proc deleteApiCredentialCredentialID*(client: OpencodeClient,
 proc patchApiCredentialCredentialID*(client: OpencodeClient,
                                      credentialID: string,
                                      location: JsonNode = default(JsonNode),
-                                     body: ApiCredentialCredentialIDRequest): Future[AsyncResponse] {.async.} =
+                                     body: PatchApiCredentialCredentialIDRequest): Future[AsyncResponse] {.async.} =
   ## Update a stored credential label.
 
   var q = initOrderedTable[string, string]()

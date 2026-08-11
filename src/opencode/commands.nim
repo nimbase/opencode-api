@@ -1,18 +1,17 @@
 # opencode API client for Nim
 #
 # Auto-generated from OpenAPI 3.x specification
-# Clue CLI Assistant https://github.com/openpeeps/clue
+# Nimbase CLI https://github.com/nimbase/nimbase
 #
-# Generated at: 2026-08-07T13:12:58+03:00
 # License: MIT
-import std/[strformat, options, json]
-import ./metaclient
-import ./types
+import std/[json]
+import ./private/metaclient
+import ./private/types
 
 type
   GetApiCommandResponse* = object
-    location: LocationInfo
-    data: seq[CommandV2Info]
+    location: types.LocationInfo
+    data: seq[types.CommandV2Info]
 
 proc getApiCommand*(client: OpencodeClient,
                     location: JsonNode = default(JsonNode)): Future[GetApiCommandResponse] {.async.} =
